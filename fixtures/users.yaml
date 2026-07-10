@@ -1,0 +1,4 @@
+# 테스트케이스 YAML에서 "${user.email}" 처럼 참조하는 실제 데이터
+user:
+  email: demo@example.com
+  password: secret123

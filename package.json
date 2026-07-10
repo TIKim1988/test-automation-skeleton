@@ -1,0 +1,15 @@
+{
+  "name": "test-automation-skeleton",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.47.0",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^20.14.0",
+    "js-yaml": "^4.1.0",
+    "typescript": "^5.9.3"
+  }
+}

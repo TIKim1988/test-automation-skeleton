@@ -1,0 +1,19 @@
+# 화면 요소 이름 -> 실제 셀렉터 매핑
+# UI가 바뀌면(클래스명, 구조 변경 등) 이 파일만 고치면 됩니다.
+# 테스트케이스 파일들은 여기 정의된 이름(email_input, login_button 등)만 참조합니다.
+
+pages:
+  login_page: /login
+
+elements:
+  email_input:
+    role: textbox
+    name: Email
+  password_input:
+    role: textbox
+    name: Password
+  login_button:
+    role: button
+    name: Log in
+  dashboard_header:
+    testId: dashboard-header
