@@ -5,7 +5,11 @@ export default defineConfig({
   timeout: 30_000,
   fullyParallel: false,
   retries: process.env.CI ? 1 : 0,
-  reporter: [['list'], ['html', { open: 'never' }]],
+  reporter: [
+    ['list'],
+    ['html', { open: 'never' }],
+    ...(process.env.CI ? [['json', { outputFile: 'test-results/results.json' }] as const] : []),
+  ],
   use: {
     baseURL: 'https://lomastore.com',
     headless: true,
