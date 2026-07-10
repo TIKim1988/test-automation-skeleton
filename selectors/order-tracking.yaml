@@ -1,0 +1,17 @@
+# lomastore.com 비회원 주문조회 화면 요소 매핑
+# 2026-07-10 실제 화면 확인. 로그인 화면(/signin)의 "비회원 주문조회" 링크로 진입.
+# 주의: 이 페이지는 Cloudflare Turnstile 봇 감지가 걸려있음 -> 조회하기 버튼 클릭/제출까지는 하지 않는다.
+
+pages:
+  order_tracking_page: /information/order-tracking
+
+elements:
+  order_number_input:
+    role: textbox
+    name: 주문번호
+  order_email_input:
+    role: textbox
+    name: 주문자 이메일 주소
+  order_lookup_button:
+    role: button
+    name: 조회하기

@@ -1,0 +1,43 @@
+# lomastore.com 홈 화면 요소 매핑
+# 2026-07-10 실제 화면 확인 후 작성 (Claude in Chrome)
+
+pages:
+  home_page: /
+
+elements:
+  nav_store:
+    role: link
+    name: 스토어
+  nav_curation:
+    role: link
+    name: 큐레이션
+  nav_event:
+    role: link
+    name: 이벤트
+  nav_blog:
+    role: link
+    name: 블로그
+  header_login_link:
+    role: link
+    name: 로그인
+  header_cart_link:
+    role: link
+    name: 장바구니
+  header_search_button:
+    role: button
+    name: 검색
+  popular_tab_condom_gel:
+    role: tab
+    name: "콘돔·젤"
+  popular_tab_healthcare:
+    role: tab
+    name: 헬스케어
+  popular_tab_home_party:
+    role: tab
+    name: 홈파티
+  popular_tab_style:
+    role: tab
+    name: 스타일
+  popular_tab_pleasure_toy:
+    role: tab
+    name: 플레저 토이

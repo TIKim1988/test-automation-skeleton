@@ -1,0 +1,27 @@
+# 주의: 이 테스트케이스는 결제 버튼이 정상적으로 노출되는지까지만 확인한다.
+# "결제하기" 버튼은 실제 PG 결제를 트리거하므로, 이 테스트케이스/자동화 실행 어디에서도
+# 절대로 클릭하지 않는다. (요청 범위: 결제는 실제 결제하기 직전까지)
+id: CHECKOUT-005
+title: 주문서 작성 후 최종 결제 버튼이 노출된다 (실제 결제는 수행하지 않음)
+tags: [smoke, checkout]
+last_verified: "2026-07-10"
+steps:
+  - action: navigate
+    target: product_guest_accessible_page
+  - action: click
+    target: add_to_cart_button
+  - action: navigate
+    target: cart_page
+  - action: click
+    target: order_button
+  - action: fill
+    target: orderer_name_input
+    value: "${checkout.guest_orderer.name}"
+  - action: fill
+    target: orderer_phone_input
+    value: "${checkout.guest_orderer.phone}"
+  - action: fill
+    target: orderer_email_input
+    value: "${checkout.guest_orderer.email}"
+  - action: assert_visible
+    target: final_pay_button

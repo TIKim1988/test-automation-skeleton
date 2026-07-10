@@ -1,0 +1,6 @@
+# 상품 상세 페이지 경로 (상품마다 slug가 다르므로, 테스트에 사용하는 대표 상품만 등록)
+# 2026-07-10 확인
+
+pages:
+  product_guest_accessible_page: /product/lililufy-pheromone-perfume-naked-fig-50
+  product_login_required_page: /product/loma-gloss-2-lililufy-150

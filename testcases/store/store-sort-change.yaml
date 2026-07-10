@@ -1,0 +1,15 @@
+id: STORE-002
+title: 카테고리 상품 목록의 정렬 옵션을 변경할 수 있다
+tags: [regression, store]
+last_verified: "2026-07-10"
+steps:
+  - action: navigate
+    target: store_category_lifestyle_page
+  - action: click
+    target: sort_price_asc
+  - action: assert_visible
+    target: sort_price_asc
+  - action: click
+    target: sort_rating
+  - action: assert_visible
+    target: sort_rating

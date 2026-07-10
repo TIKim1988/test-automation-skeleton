@@ -1,0 +1,34 @@
+# lomastore.com 검색 결과 화면 요소 매핑
+# 2026-07-10 실제 화면 확인. 실제 URL은 /search?q=<키워드> 형태 (쿼리스트링은 fixtures 값으로 조합).
+
+pages:
+  search_page: /search
+
+elements:
+  search_input:
+    role: textbox
+    name: 상품 검색
+  search_submit_button:
+    role: button
+    name: 검색
+  search_page_heading:
+    role: heading
+    name: 상품검색
+  sort_relevance:
+    role: link
+    name: 관련도순
+  sort_popularity:
+    role: link
+    name: 인기순
+  sort_rating:
+    role: link
+    name: 평점순
+  sort_latest:
+    role: link
+    name: 최신순
+  sort_price_desc:
+    role: link
+    name: 높은가격순
+  sort_price_asc:
+    role: link
+    name: 낮은가격순

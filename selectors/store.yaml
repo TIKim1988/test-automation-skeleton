@@ -1,0 +1,41 @@
+# lomastore.com 스토어(카테고리) 화면 요소 매핑
+# 2026-07-10 실제 화면 확인. 카테고리별 하위 경로 예) /store/lifestyle, /store/bdsm
+
+pages:
+  store_page: /store
+  store_category_lifestyle_page: /store/lifestyle
+
+elements:
+  category_bdsm:
+    role: link
+    name: BDSM
+  category_best:
+    role: link
+    name: BEST
+  category_new:
+    role: link
+    name: NEW
+  category_lifestyle:
+    role: link
+    name: 라이프스타일
+  sort_recommend:
+    role: link
+    name: 추천순
+  sort_popularity:
+    role: link
+    name: 인기순
+  sort_rating:
+    role: link
+    name: 평점순
+  sort_latest:
+    role: link
+    name: 최신순
+  sort_price_desc:
+    role: link
+    name: 가격높은순
+  sort_price_asc:
+    role: link
+    name: 가격낮은순
+  wishlist_button:
+    role: button
+    name: 찜하기

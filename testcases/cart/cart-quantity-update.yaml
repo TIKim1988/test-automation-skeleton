@@ -1,0 +1,22 @@
+# 참고: 수량 변경 시 합계 금액이 재계산되는 것을 실제 화면에서 확인했다.
+# 금액/수량 표시 영역이 role=generic 이라 안정적인 selector가 아직 없어(자동화팀에 testId 요청 필요),
+# 이 테스트케이스는 "버튼 조작이 에러 없이 동작한다" 수준까지만 다룬다.
+id: CART-002
+title: 장바구니에서 수량 증가/감소 버튼을 누를 수 있다
+tags: [regression, cart]
+last_verified: "2026-07-10"
+steps:
+  - action: navigate
+    target: product_guest_accessible_page
+  - action: click
+    target: add_to_cart_button
+  - action: navigate
+    target: cart_page
+  - action: click
+    target: quantity_increase_button
+  - action: assert_visible
+    target: order_button
+  - action: click
+    target: quantity_decrease_button
+  - action: assert_visible
+    target: order_button

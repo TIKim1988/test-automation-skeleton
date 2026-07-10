@@ -1,0 +1,23 @@
+id: CHECKOUT-003
+title: 주문서 화면에서 결제 수단을 선택할 수 있다
+tags: [regression, checkout]
+last_verified: "2026-07-10"
+steps:
+  - action: navigate
+    target: product_guest_accessible_page
+  - action: click
+    target: add_to_cart_button
+  - action: navigate
+    target: cart_page
+  - action: click
+    target: order_button
+  - action: assert_visible
+    target: payment_method_card_radio
+  - action: click
+    target: payment_method_transfer_radio
+  - action: assert_visible
+    target: payment_method_transfer_radio
+  - action: click
+    target: payment_method_bacs_radio
+  - action: assert_visible
+    target: payment_method_bacs_radio

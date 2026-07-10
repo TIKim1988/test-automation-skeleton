@@ -1,0 +1,37 @@
+# lomastore.com 상품 상세 화면 요소 매핑
+# 2026-07-10 실제 화면 확인. 상세 경로는 상품마다 다름 -> fixtures.product.*_slug 로 조합해서 navigate.
+
+pages: {}
+
+elements:
+  share_button:
+    role: button
+    name: 공유
+  wishlist_button:
+    role: button
+    name: 찜하기
+  quantity_decrease_button:
+    role: button
+    name: 수량 감소
+  quantity_increase_button:
+    role: button
+    name: 수량 증가
+  add_to_cart_button:
+    role: button
+    name: 장바구니 담기
+  # 19세 이상 인증/로그인이 필요한 상품에 비로그인 상태로 접근했을 때 노출되는 안내 화면
+  login_required_heading:
+    role: heading
+    name: 로그인이 필요한 상품이에요.
+  login_required_link:
+    role: link
+    name: 로그인하기
+  # 상품명 제목(h1)은 상품마다 텍스트가 달라 role+name 고정 매칭이 불가능함.
+  # 실제 DOM에 data-testid가 아직 없는 것을 확인함 -> 자동화 프로젝트에 testId 부여를 요청해야 함.
+  # 그 전까지 자동화 쪽에서는 "페이지 내 첫 번째 heading" 정도로 임시 대체 가능.
+  product_title:
+    testId: product-title
+  # "총 N개" 수량 표시 영역도 role이 generic이라 role+name 매칭이 불안정함.
+  # 실제 DOM에 data-testid가 아직 없는 것을 확인함 -> 자동화 프로젝트에 testId 부여 요청 필요.
+  total_quantity_label:
+    testId: product-total-quantity

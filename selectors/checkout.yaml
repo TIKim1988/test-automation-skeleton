@@ -1,0 +1,49 @@
+# lomastore.com 주문서(체크아웃) 화면 요소 매핑
+# 2026-07-10 실제 화면 확인. 비로그인 상태에서도 게스트 주문서 작성까지 진입 가능함을 확인.
+# 주의: 이 프로젝트 테스트케이스는 "실제 결제하기 버튼 클릭 직전"까지만 다룬다.
+
+pages:
+  checkout_page: /checkout
+
+elements:
+  orderer_name_input:
+    role: textbox
+    name: 성함
+  orderer_phone_input:
+    role: textbox
+    name: 휴대폰번호
+  orderer_email_input:
+    role: textbox
+    name: 이메일 주소
+  receiver_name_input:
+    role: textbox
+    name: 성함
+  receiver_phone_input:
+    role: textbox
+    name: 휴대폰번호
+  receiver_zipcode_input:
+    role: textbox
+    name: 우편번호
+  address_search_button:
+    role: button
+    name: 주소 찾기
+  payment_method_card_radio:
+    role: radio
+    name: CARD
+  payment_method_transfer_radio:
+    role: radio
+    name: TRANSFER
+  payment_method_bacs_radio:
+    role: radio
+    name: bacs
+  terms_of_service_button:
+    role: button
+    name: 이용약관
+  privacy_policy_button:
+    role: button
+    name: 개인정보처리방침
+  # 실제 접근성 이름은 "총 N원 결제하기" (N은 결제금액에 따라 동적) - 자동화 쪽에서 부분/정규식 일치 필요.
+  # 이 버튼은 절대 클릭하지 않는다 (assert_visible 까지만 사용).
+  final_pay_button:
+    role: button
+    name: 결제하기

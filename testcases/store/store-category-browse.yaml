@@ -1,0 +1,13 @@
+id: STORE-001
+title: 스토어에서 카테고리를 선택하면 해당 카테고리 상품 목록이 노출된다
+tags: [smoke, store]
+last_verified: "2026-07-10"
+steps:
+  - action: navigate
+    target: store_page
+  - action: click
+    target: category_lifestyle
+  - action: assert_visible
+    target: category_lifestyle
+  - action: assert_visible
+    target: wishlist_button

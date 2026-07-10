@@ -1,0 +1,18 @@
+# 참고: 수량을 늘리면 총 수량/합계 금액이 재계산되는 것을 실제 화면에서 확인했다.
+# 다만 수량 표시 영역이 아직 role/name 만으로 안정적으로 특정되지 않아(테스트케이스 관리 쪽에서
+# testId 부여를 요청해둔 상태), 이 테스트케이스는 "버튼 클릭이 에러 없이 동작한다" 수준까지만 다룬다.
+id: PRODUCT-002
+title: 상품 상세에서 수량 증가/감소 버튼을 누를 수 있다
+tags: [regression, product]
+last_verified: "2026-07-10"
+steps:
+  - action: navigate
+    target: product_guest_accessible_page
+  - action: click
+    target: quantity_increase_button
+  - action: assert_visible
+    target: total_quantity_label
+  - action: click
+    target: quantity_decrease_button
+  - action: assert_visible
+    target: add_to_cart_button
