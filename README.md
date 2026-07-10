@@ -96,3 +96,63 @@ npx playwright test                            # lomastore.com 대상, 23개
 지금은 한 저장소에 다 들어있지만, 실제로 "테스트케이스 관리" repo와 "자동화" repo를 분리하고
 싶다면 `testcases/`, `selectors/`, `fixtures/`를 git submodule이나 서브트리로 자동화 repo에
 포함시키면 됩니다. 자동화 쪽 러너 코드는 경로만 알면 되므로 구조 변경이 거의 없습니다.
+
+## 테스트케이스 전체 목록 (23개)
+
+### home/
+
+| ID | 제목 | 태그 |
+|---|---|---|
+| HOME-001 | 홈페이지 접속 시 헤더 내비게이션과 인기상품 영역이 노출된다 | smoke, home |
+| HOME-002 | 인기상품 영역의 카테고리 탭을 클릭해도 에러 없이 전환된다 | regression, home |
+
+### search/
+
+| ID | 제목 | 태그 |
+|---|---|---|
+| SEARCH-001 | 검색창에 키워드를 입력해 검색하면 검색 결과 화면이 노출된다 | smoke, search |
+| SEARCH-002 | 검색 결과 화면에서 정렬 옵션을 변경할 수 있다 | regression, search |
+| SEARCH-003 | 결과가 거의 없을 법한 키워드로 검색해도 검색 결과 화면이 정상적으로 노출된다 | regression, search |
+
+### store/
+
+| ID | 제목 | 태그 |
+|---|---|---|
+| STORE-001 | 스토어에서 카테고리를 선택하면 해당 카테고리 상품 목록이 노출된다 | smoke, store |
+| STORE-002 | 카테고리 상품 목록의 정렬 옵션을 변경할 수 있다 | regression, store |
+
+### product/
+
+| ID | 제목 | 태그 | 비고 |
+|---|---|---|---|
+| PRODUCT-001 | 상품 상세 페이지에 상품명/수량조절/장바구니담기 버튼이 노출된다 | smoke, product | known-issues.ts로 skip 중 (상품명 testId 미부여) |
+| PRODUCT-002 | 상품 상세에서 수량 증가/감소 버튼을 누를 수 있다 | regression, product | known-issues.ts로 skip 중 (수량 표시 testId 미부여) |
+| PRODUCT-003 | 장바구니 담기 클릭 시 장바구니에 상품이 추가된다 | smoke, product, cart | |
+| PRODUCT-004 | 로그인이 필요한 상품에 비로그인 상태로 접근하면 로그인 안내 화면이 노출된다 | regression, product | |
+| PRODUCT-005 | 비로그인 상태에서 찜하기 버튼을 누르면 로그인 화면으로 이동한다 | regression, product | |
+
+### cart/
+
+| ID | 제목 | 태그 |
+|---|---|---|
+| CART-001 | 장바구니에 담긴 상품과 주문 버튼이 노출된다 | smoke, cart |
+| CART-002 | 장바구니에서 수량 증가/감소 버튼을 누를 수 있다 | regression, cart |
+| CART-003 | 장바구니 상품 삭제 시 확인 팝업 후 삭제된다 | regression, cart |
+| CART-004 | 장바구니를 비우면 빈 장바구니 안내와 이동 버튼이 노출된다 | regression, cart |
+| CART-005 | 장바구니 비우기 확인 팝업에서 취소하면 상품이 유지된다 | regression, cart |
+
+### checkout/
+
+| ID | 제목 | 태그 |
+|---|---|---|
+| CHECKOUT-001 | 비로그인 상태에서도 장바구니의 주문하기를 통해 주문서 화면에 진입할 수 있다 | smoke, checkout |
+| CHECKOUT-002 | 주문서 화면에 주문자 정보와 배송지 정보 입력란이 노출되고 입력할 수 있다 | regression, checkout |
+| CHECKOUT-003 | 주문서 화면에서 결제 수단을 선택할 수 있다 | regression, checkout |
+| CHECKOUT-004 | 주문서 화면에 이용약관/개인정보처리방침 안내가 노출된다 | regression, checkout |
+| CHECKOUT-005 | 주문서 작성 후 최종 결제 버튼이 노출된다 (실제 결제는 수행하지 않음) | smoke, checkout |
+
+### order-tracking/
+
+| ID | 제목 | 태그 |
+|---|---|---|
+| ORDER-001 | 비회원 주문조회 화면에 주문번호/이메일 입력란과 조회 버튼이 노출된다 | regression, order-tracking |
