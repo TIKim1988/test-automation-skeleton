@@ -54,3 +54,45 @@ npx playwright test
 지금은 한 저장소에 다 들어있지만, 실제로 "테스트케이스 관리" repo와 "자동화" repo를 분리하고
 싶다면 `testcases/`, `selectors/`, `fixtures/`를 git submodule이나 서브트리로 자동화 repo에
 포함시키면 됩니다. 자동화 쪽 러너 코드는 경로만 알면 되므로 구조 변경이 거의 없습니다.
+
+## lomastore.com 실사이트 연동 (자동화 프로젝트, 2026-07-10)
+
+`testcases/`에 lomastore.com 실 화면을 검증하며 작성된 22개 테스트케이스가 추가된 것에 맞춰,
+자동화 쪽(이 프로젝트가 소유하는 `playwright.config.ts`, `automation/runner/*`,
+`automation/tests/*`)을 다음과 같이 대응했습니다. `testcases/`, `selectors/`, `fixtures/`
+파일 내용은 건드리지 않았습니다.
+
+- **실행 대상 전환**: 기본 실행은 `https://lomastore.com` (실사이트)을 대상으로 합니다.
+  뼈대 시연용 `demo-app/`은 지우지 않고 `DEMO=1 npx playwright test` 로 실행할 수 있게
+  `playwright.config.ts`에서 분기 처리했습니다.
+- **로그인 테스트케이스(LOGIN-001/002) 기본 제외**: 이 두 케이스는 demo-app의 가짜 로그인
+  화면(role name "Email"/"Password"/"Log in") 대상이라 실제 lomastore.com에는 해당 화면이
+  없고, lomastore.com 테스트케이스 작성 시에도 "로그인 자체는 제외" 범위였습니다. 기본
+  실행에서는 `testcases/login/` 폴더를 제외하고, `DEMO=1` 모드에서만 실행되도록
+  `automation/tests/run-testcases.spec.ts`에서 처리했습니다. 실제 lomastore.com 로그인
+  테스트케이스가 별도로 추가되면 이 예외 처리를 재검토해야 합니다.
+- **fixtures 병합**: `fixtures/` 폴더 아래 모든 yaml(`users.yaml`, `lomastore.yaml` 등)을
+  자동으로 병합해서 사용하도록 `loader.ts`의 `loadFixtures`를 폴더 단위로 바꿨습니다.
+- **testId 미부여 요소 skip 처리**: `selectors/product.yaml`의 `product_title`,
+  `total_quantity_label`은 테스트케이스 관리 프로젝트가 실제 DOM에 아직 `data-testid`가
+  없다고 표시해둔 자리입니다. 이 요소를 참조하는 테스트(PRODUCT-001, PRODUCT-002)는 실패
+  대신 사유와 함께 skip되도록 `automation/runner/known-issues.ts`에 등록했습니다.
+  프론트엔드에 testId가 실제로 추가되면 이 목록에서 지우면 정상 실행됩니다.
+- **결제 버튼 미클릭 원칙 유지**: `checkout-final-pay-button-visible.yaml`처럼 실제 결제를
+  트리거하는 버튼은 테스트케이스에서부터 `assert_visible`까지만 사용하므로, 인터프리터
+  쪽에서 추가로 막을 로직은 필요 없었습니다.
+
+### 확인한 것 / 확인 못한 것
+
+- `npm install`, `tsc --noEmit`, `npx playwright test --list`(기본 모드 23개, `DEMO=1`
+  모드 2개로 정확히 분기되는 것)까지 확인했습니다.
+- 이 샌드박스 환경은 Playwright 브라우저 바이너리 다운로드가 크고(약 190MB) 세션마다 처음부터
+  다시 받아야 해서, 실제 브라우저 실행까지는 이 세션에서 확인하지 못했습니다. 로컬/CI에서는
+  다음으로 바로 실행됩니다.
+
+```bash
+npm install
+npx playwright install --with-deps chromium   # 최초 1회
+npx playwright test                            # 기본: lomastore.com 대상, 23개
+DEMO=1 npx playwright test                     # demo-app 뼈대 시연, 2개
+```
