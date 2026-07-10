@@ -11,20 +11,8 @@ import type { TestCase } from '../runner/types';
 // testcases/, selectors/, fixtures/ 는 다른 프로젝트(테스트케이스 관리)가 수정하지만,
 // 같은 저장소를 공유하므로 여기서는 경로만 알면 됩니다. (내용은 절대 직접 고치지 않음)
 const ROOT = path.resolve(__dirname, '../..');
-const isDemo = process.env.DEMO === '1';
 
-// testcases/login/*.yaml (LOGIN-001, LOGIN-002)은 이 뼈대를 시연하기 위한 demo-app 전용
-// 가짜 로그인 화면(role name "Email"/"Password"/"Log in", testId "dashboard-header")을 대상으로
-// 작성되어 있습니다. 실제 lomastore.com에는 해당 화면이 존재하지 않고, lomastore.com 테스트케이스
-// 리포트에도 "로그인 자체는 제외"라고 명시되어 있습니다.
-// -> DEMO=1(로컬 demo-app) 모드에서는 뼈대 동작 확인용으로 이 폴더만 실행하고,
-//    기본(실제 lomastore.com) 모드에서는 제외합니다.
-// 테스트케이스 관리 프로젝트에서 lomastore.com 실 로그인 시나리오를 별도로 추가하면
-// 이 예외 처리는 재검토가 필요합니다.
-const testCases: TestCase[] = isDemo
-  ? loadTestCases(path.join(ROOT, 'testcases')).filter((tc) => tc.file.split(path.sep).includes('login'))
-  : loadTestCases(path.join(ROOT, 'testcases'), { excludeDirNames: ['login'] });
-
+const testCases: TestCase[] = loadTestCases(path.join(ROOT, 'testcases'));
 const selectors = loadSelectors(path.join(ROOT, 'selectors'));
 const fixtures = loadFixtures(path.join(ROOT, 'fixtures'));
 
