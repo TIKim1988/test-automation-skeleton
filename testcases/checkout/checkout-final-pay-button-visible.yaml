@@ -4,12 +4,14 @@
 id: CHECKOUT-005
 title: 주문서 작성 후 최종 결제 버튼이 노출된다 (실제 결제는 수행하지 않음)
 tags: [smoke, checkout]
-last_verified: "2026-07-10"
+last_verified: "2026-07-11"
 steps:
   - action: navigate
     target: product_guest_accessible_page
   - action: click
     target: add_to_cart_button
+  - action: wait
+    timeoutMs: 2000
   - action: navigate
     target: cart_page
   - action: click
