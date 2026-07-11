@@ -6,11 +6,14 @@ import { resolveTemplate } from './loader';
 export type CustomStepFn = (page: Page, step: Step, ctx: Record<string, unknown>) => Promise<void>;
 
 function resolveLocator(page: Page, def: ElementDef): Locator {
-  if (def.testId) return page.getByTestId(def.testId);
-  if (def.role) return page.getByRole(def.role as Parameters<Page['getByRole']>[0], def.name ? { name: def.name } : undefined);
-  if (def.text) return page.getByText(def.text);
-  if (def.css) return page.locator(def.css);
-  throw new Error(`셀렉터 정의에 role/testId/text/css 중 하나가 필요합니다: ${JSON.stringify(def)}`);
+  let locator: Locator;
+  if (def.testId) locator = page.getByTestId(def.testId);
+  else if (def.role) locator = page.getByRole(def.role as Parameters<Page['getByRole']>[0], def.name ? { name: def.name } : undefined);
+  else if (def.text) locator = page.getByText(def.text);
+  else if (def.css) locator = page.locator(def.css);
+  else throw new Error(`셀렉터 정의에 role/testId/text/css 중 하나가 필요합니다: ${JSON.stringify(def)}`);
+  // index 필드가 있으면 nth()로 특정 인덱스 요소만 선택 (strict mode 위반 방지)
+  return typeof def.index === 'number' ? locator.nth(def.index) : locator;
 }
 
 function requireElement(selectors: SelectorMap, target?: string): ElementDef {
