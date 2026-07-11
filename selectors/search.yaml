@@ -1,12 +1,13 @@
 # lomastore.com 검색 결과 화면 요소 매핑
 # 2026-07-10 실제 화면 확인. 실제 URL은 /search?q=<키워드> 형태 (쿼리스트링은 fixtures 값으로 조합).
+# 2026-07-11 수정: search_input role textbox→searchbox(<input type="search">), sort 옵션 role link→button
 
 pages:
   search_page: /search
 
 elements:
   search_input:
-    role: textbox
+    role: searchbox
     name: 상품 검색
   search_submit_button:
     role: button
@@ -15,20 +16,20 @@ elements:
     role: heading
     name: 상품검색
   sort_relevance:
-    role: link
+    role: button
     name: 관련도순
   sort_popularity:
-    role: link
+    role: button
     name: 인기순
   sort_rating:
-    role: link
+    role: button
     name: 평점순
   sort_latest:
-    role: link
+    role: button
     name: 최신순
   sort_price_desc:
-    role: link
+    role: button
     name: 높은가격순
   sort_price_asc:
-    role: link
+    role: button
     name: 낮은가격순
