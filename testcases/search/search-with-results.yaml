@@ -1,16 +1,14 @@
 id: SEARCH-001
 title: 검색창에 키워드를 입력해 검색하면 검색 결과 화면이 노출된다
 tags: [smoke, search]
-last_verified: "2026-07-10"
+last_verified: "2026-07-11"
 steps:
   - action: navigate
     target: home_page
-  - action: click
-    target: header_search_button
   - action: fill
     target: search_input
     value: "${search.keyword_with_results}"
   - action: click
-    target: search_submit_button
+    target: header_search_button
   - action: assert_visible
     target: search_page_heading
