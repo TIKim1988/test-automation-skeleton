@@ -1,12 +1,14 @@
 id: CART-003
 title: 장바구니 상품 삭제 시 확인 팝업 후 삭제된다
 tags: [regression, cart]
-last_verified: "2026-07-10"
+last_verified: "2026-07-11"
 steps:
   - action: navigate
     target: product_guest_accessible_page
   - action: click
     target: add_to_cart_button
+  - action: wait
+    timeoutMs: 2000
   - action: navigate
     target: cart_page
   - action: click
