@@ -1,5 +1,6 @@
 # lomastore.com 장바구니 화면 요소 매핑
 # 2026-07-10 실제 화면 확인 (비로그인 게스트 장바구니로 접근 가능함을 확인).
+# 2026-07-11 수정: empty_cart_message role:generic → text 셀렉터로 변경
 
 pages:
   cart_page: /cart
@@ -42,8 +43,6 @@ elements:
   empty_cart_home_link:
     role: link
     name: 홈으로
-  # 아래 요소는 접근성 role이 "generic"(일반 텍스트)이라 role/name만으로는 안정적으로 특정하기 어려움.
-  # 자동화 프로젝트 쪽에 testId 부여를 요청해야 함.
+  # role:generic 은 getByRole()에서 지원하지 않아 text 셀렉터로 대체
   empty_cart_message:
-    role: generic
-    name: 장바구니가 비어 있습니다.
+    text: 장바구니가 비어 있습니다.
