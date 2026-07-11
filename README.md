@@ -2,6 +2,7 @@
 | 날짜 | 내용 |
 |---|---|
 | 260710 | 깃허브 최초 푸시, 비회원기반 스포크 테스트케이스 작성, 테스트 케이스 기반 playwright 구축, 깃허브 액션 스케쥴링 구축 |
+| 260711 | 홈 배너·인기상품·풋터 테스트케이스 추가 (HOME-003~008), selectors/legal.yaml 추가 |
 
 # 테스트케이스 <-> 자동화 연동 뼈대
 
@@ -24,22 +25,23 @@
 ├── selectors/                 화면 요소 이름 -> 실제 role/testId/css 매핑 (화면 단위 파일 분리)
 │   ├── home.yaml, search.yaml, store.yaml, product.yaml
 │   ├── cart.yaml, checkout.yaml, order-tracking.yaml
+│   ├── legal.yaml             이용약관·개인정보처리방침·FAQ 페이지 (풋터 링크 이동 테스트 대응)
 │   ├── signin.yaml            비로그인 접근 시 로그인 화면 리다이렉트 확인용 (로그인 시나리오 자체는 범위 밖)
 │   └── product_pages.yaml     테스트에 쓰는 대표 상품의 상세 페이지 경로
 ├── fixtures/
 │   └── lomastore.yaml         검색어, 상품 slug, 주문자 정보 등 테스트 데이터
 │
-├── automation/                 자동화 프로젝트 소유
+├── automation/                자동화 프로젝트 소유
 │   ├── runner/
-│   │   ├── types.ts            Step/TestCase/SelectorMap 타입
-│   │   ├── loader.ts           testcases·selectors·fixtures 로딩 + ${} 템플릿 치환
-│   │   ├── selectors.ts        selectors/*.yaml 병합
-│   │   ├── interpreter.ts      step -> 실제 Playwright 명령 변환/실행
-│   │   └── known-issues.ts     아직 실제 DOM에 없는 testId를 참조하는 테스트를 실패 대신 skip 처리
-│   ├── steps/custom.ts         YAML 기본 action으로 못 담는 로직 확장 지점
-│   └── tests/run-testcases.spec.ts   testcases/를 읽어 실행하는 진입점
+│   │   ├── types.ts           Step/TestCase/SelectorMap 타입
+│   │   ├── loader.ts          testcases·selectors·fixtures 로딩 + ${} 템플릿 치환
+│   │   ├── selectors.ts       selectors/*.yaml 병합
+│   │   ├── interpreter.ts     step -> 실제 Playwright 명령 변환/실행
+│   │   └── known-issues.ts    아직 실제 DOM에 없는 testId를 참조하는 테스트를 실패 대신 skip 처리
+│   ├── steps/custom.ts        YAML 기본 action으로 못 담는 로직 확장 지점
+│   └── tests/run-testcases.spec.ts  testcases/를 읽어 실행하는 진입점
 │
-├── playwright.config.ts        baseURL: https://lomastore.com
+├── playwright.config.ts       baseURL: https://lomastore.com
 ├── package.json / package-lock.json
 └── tsconfig.json
 ```
@@ -65,7 +67,7 @@
 - 버튼 클래스명, DOM 구조가 바뀐 정도 -> `selectors/*.yaml` 한 줄만 수정. 테스트케이스와 자동화 코드는 그대로.
 - 화면 플로우 자체가 바뀜 -> 해당 `testcases/*.yaml`의 `steps` 배열만 수정.
 - Playwright API로 표현하기 애매한 복잡한 로직(파일 업로드, 여러 탭 등) -> `automation/steps/custom.ts`에
-  이름을 등록하고, 테스트케이스에서는 `action: custom` + `name`으로 호출.
+이름을 등록하고, 테스트케이스에서는 `action: custom` + `name`으로 호출.
 
 세 경우 모두 "자동화 러너 코드(`interpreter.ts`)"는 건드릴 필요가 없습니다.
 
@@ -85,8 +87,8 @@
 
 ```bash
 npm install
-npx playwright install --with-deps chromium   # 최초 1회
-npx playwright test                            # lomastore.com 대상, 23개
+npx playwright install --with-deps chromium # 최초 1회
+npx playwright test # lomastore.com 대상, 29개
 ```
 
 로그인 자체는 현재 스코프에서 제외되어 있습니다 (`selectors/signin.yaml` 참고 — 비로그인
@@ -102,7 +104,7 @@ npx playwright test                            # lomastore.com 대상, 23개
 싶다면 `testcases/`, `selectors/`, `fixtures/`를 git submodule이나 서브트리로 자동화 repo에
 포함시키면 됩니다. 자동화 쪽 러너 코드는 경로만 알면 되므로 구조 변경이 거의 없습니다.
 
-## 테스트케이스 전체 목록 (23개)
+## 테스트케이스 전체 목록 (29개)
 
 ### home/
 
@@ -110,6 +112,12 @@ npx playwright test                            # lomastore.com 대상, 23개
 |---|---|---|
 | HOME-001 | 홈페이지 접속 시 헤더 내비게이션과 인기상품 영역이 노출된다 | smoke, home |
 | HOME-002 | 인기상품 영역의 카테고리 탭을 클릭해도 에러 없이 전환된다 | regression, home |
+| HOME-003 | 배너 슬라이드 클릭 시 해당 이벤트·상품 페이지로 이동한다 | smoke, home |
+| HOME-004 | 배너 슬라이드 클릭 후 사이트 헤더 내비게이션이 유지된다 | regression, home |
+| HOME-005 | 인기상품 카드 클릭 시 상품 상세 페이지로 이동한다 | smoke, home |
+| HOME-006 | 인기상품 카드 클릭 후 상품 상세에서 찜하기·공유 버튼이 노출된다 | regression, home |
+| HOME-007 | 풋터 이용약관 링크 클릭 시 이용약관 페이지로 이동한다 | smoke, home |
+| HOME-008 | 풋터 비회원 주문조회 링크 클릭 시 주문조회 페이지로 이동한다 | regression, home |
 
 ### search/
 
