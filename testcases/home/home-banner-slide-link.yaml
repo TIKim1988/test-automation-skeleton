@@ -1,1 +1,11 @@
-
+id: HOME-004
+title: 배너 슬라이드 클릭 후 사이트 헤더 내비게이션이 유지된다
+tags: [regression, home]
+last_verified: "2026-07-11"
+steps:
+  - action: navigate
+    target: home_page
+  - action: click
+    target: home_banner_active_slide_link
+  - action: assert_visible
+    target: nav_store
