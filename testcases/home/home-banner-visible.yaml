@@ -1,0 +1,9 @@
+id: HOME-003
+title: 홈 메인 배너 슬라이드 영역이 노출된다
+tags: [smoke, home]
+last_verified: "2026-07-11"
+steps:
+  - action: navigate
+    target: home_page
+  - action: assert_visible
+    target: home_banner_pagination
