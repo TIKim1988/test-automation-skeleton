@@ -1,12 +1,14 @@
 id: CART-001
 title: 장바구니에 담긴 상품과 주문 버튼이 노출된다
 tags: [smoke, cart]
-last_verified: "2026-07-10"
+last_verified: "2026-07-11"
 steps:
   - action: navigate
     target: product_guest_accessible_page
   - action: click
     target: add_to_cart_button
+  - action: wait
+    timeoutMs: 2000
   - action: navigate
     target: cart_page
   - action: assert_visible
