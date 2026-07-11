@@ -1,1 +1,11 @@
-
+id: HOME-008
+title: 풋터 비회원 주문조회 링크 클릭 시 주문조회 페이지로 이동한다
+tags: [regression, home]
+last_verified: "2026-07-11"
+steps:
+  - action: navigate
+    target: home_page
+  - action: click
+    target: footer_order_tracking_link
+  - action: assert_visible
+    target: order_number_input
