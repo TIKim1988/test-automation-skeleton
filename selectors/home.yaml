@@ -1,14 +1,14 @@
 # lomastore.com 홈 화면 요소 매핑
 # 2026-07-10 실제 화면 확인 후 작성 (Claude in Chrome)
 # 2026-07-11 배너·인기상품·풋터 셀렉터 추가
+# 2026-07-11 nav_store: substring 오매칭 수정 (header a[href] CSS 셀렉터로 변경)
 
 pages:
   home_page: /
 
 elements:
   nav_store:
-    role: link
-    name: 스토어
+    css: "header a[href='/store']"
   nav_curation:
     role: link
     name: 큐레이션
@@ -51,7 +51,7 @@ elements:
   home_banner_active_slide_link:
     css: "section.max-w-7xl .swiper-slide-active a"
 
-  # ── 인기상품 카드 ─────────────────────────────────────────────────────
+  # ── 인기상품 ────────────────────────────────────────────────────────────
   # tablist 를 가진 section(= 인기상품 영역)의 활성 탭 패널 안 상품 링크
   popular_product_card:
     css: "section:has([role='tablist']) .swiper-slide-active a[href*='/product/']"
