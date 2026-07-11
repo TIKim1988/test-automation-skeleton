@@ -1,1 +1,11 @@
-
+id: HOME-007
+title: 풋터 이용약관 링크 클릭 시 이용약관 페이지로 이동한다
+tags: [smoke, home]
+last_verified: "2026-07-11"
+steps:
+  - action: navigate
+    target: home_page
+  - action: click
+    target: footer_terms_link
+  - action: assert_visible
+    target: terms_page_heading
