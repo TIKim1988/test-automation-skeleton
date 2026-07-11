@@ -1,5 +1,6 @@
 # lomastore.com 홈 화면 요소 매핑
 # 2026-07-10 실제 화면 확인 후 작성 (Claude in Chrome)
+# 2026-07-11 배너·인기상품·풋터 셀렉터 추가
 
 pages:
   home_page: /
@@ -41,3 +42,30 @@ elements:
   popular_tab_pleasure_toy:
     role: tab
     name: 플레저 토이
+
+  # ── 배너 ──────────────────────────────────────────────────────────────
+  # .home-banner-pagination 은 메인 히어로 배너에만 붙는 고유 클래스
+  home_banner_pagination:
+    css: .home-banner-pagination
+  # 현재 활성 배너 슬라이드의 클릭 링크 (배너 영역 section.max-w-7xl 한정)
+  home_banner_active_slide_link:
+    css: "section.max-w-7xl .swiper-slide-active a"
+
+  # ── 인기상품 카드 ─────────────────────────────────────────────────────
+  # tablist 를 가진 section(= 인기상품 영역)의 활성 탭 패널 안 상품 링크
+  popular_product_card:
+    css: "section:has([role='tablist']) .swiper-slide-active a[href*='/product/']"
+
+  # ── 풋터 ──────────────────────────────────────────────────────────────
+  footer_terms_link:
+    role: link
+    name: 이용약관
+  footer_privacy_link:
+    role: link
+    name: 개인정보처리방침
+  footer_order_tracking_link:
+    role: link
+    name: 비회원 주문조회
+  footer_cs_faq_link:
+    role: link
+    name: 자주 찾는 질문
