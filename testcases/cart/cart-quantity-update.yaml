@@ -4,12 +4,14 @@
 id: CART-002
 title: 장바구니에서 수량 증가/감소 버튼을 누를 수 있다
 tags: [regression, cart]
-last_verified: "2026-07-10"
+last_verified: "2026-07-11"
 steps:
   - action: navigate
     target: product_guest_accessible_page
   - action: click
     target: add_to_cart_button
+  - action: wait
+    timeoutMs: 2000
   - action: navigate
     target: cart_page
   - action: click
