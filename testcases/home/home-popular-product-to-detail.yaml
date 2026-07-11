@@ -1,1 +1,15 @@
-
+id: HOME-006
+title: 인기상품 카드 클릭 후 상품 상세에서 찜하기·공유 버튼이 노출된다
+tags: [regression, home]
+last_verified: "2026-07-11"
+steps:
+  - action: navigate
+    target: home_page
+  - action: click
+    target: popular_product_card
+  - action: assert_visible
+    target: add_to_cart_button
+  - action: assert_visible
+    target: wishlist_button
+  - action: assert_visible
+    target: share_button
