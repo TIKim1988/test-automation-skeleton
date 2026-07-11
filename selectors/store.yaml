@@ -1,5 +1,6 @@
 # lomastore.com 스토어(카테고리) 화면 요소 매핑
 # 2026-07-10 실제 화면 확인. 카테고리별 하위 경로 예) /store/lifestyle, /store/bdsm
+# 2026-07-11 수정: wishlist_button에 index:0 추가 (36개 버튼 strict mode 위반 방지)
 
 pages:
   store_page: /store
@@ -36,6 +37,8 @@ elements:
   sort_price_asc:
     role: link
     name: 가격낮은순
+  # 상품 목록에 찜하기 버튼이 36개 이상 존재 → index:0으로 첫 번째 버튼만 선택
   wishlist_button:
     role: button
     name: 찜하기
+    index: 0
