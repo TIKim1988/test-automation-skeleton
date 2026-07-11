@@ -35,6 +35,7 @@ export interface ElementDef {
   testId?: string;
   css?: string;
   text?: string;
+  index?: number; // nth() 인덱스: 복수 매칭 요소 중 특정 인덱스 선택 (0부터 시작)
 }
 
 export interface SelectorMap {
