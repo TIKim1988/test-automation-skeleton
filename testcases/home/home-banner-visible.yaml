@@ -1,9 +1,11 @@
 id: HOME-003
-title: 홈 메인 배너 슬라이드 영역이 노출된다
+title: 배너 슬라이드 클릭 시 해당 이벤트·상품 페이지로 이동한다
 tags: [smoke, home]
 last_verified: "2026-07-11"
 steps:
   - action: navigate
     target: home_page
-  - action: assert_visible
+  - action: click
+    target: home_banner_active_slide_link
+  - action: assert_hidden
     target: home_banner_pagination
