@@ -1,12 +1,14 @@
 id: PRODUCT-003
 title: 장바구니 담기 클릭 시 장바구니에 상품이 추가된다
 tags: [smoke, product, cart]
-last_verified: "2026-07-10"
+last_verified: "2026-07-11"
 steps:
   - action: navigate
     target: product_guest_accessible_page
   - action: click
     target: add_to_cart_button
+  - action: wait
+    timeoutMs: 2000
   - action: navigate
     target: cart_page
   - action: assert_visible
