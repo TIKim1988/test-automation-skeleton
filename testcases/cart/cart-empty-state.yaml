@@ -1,12 +1,14 @@
 id: CART-004
 title: 장바구니를 비우면 빈 장바구니 안내와 이동 버튼이 노출된다
 tags: [regression, cart]
-last_verified: "2026-07-10"
+last_verified: "2026-07-11"
 steps:
   - action: navigate
     target: product_guest_accessible_page
   - action: click
     target: add_to_cart_button
+  - action: wait
+    timeoutMs: 2000
   - action: navigate
     target: cart_page
   - action: click
