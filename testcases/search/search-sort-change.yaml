@@ -1,17 +1,15 @@
 id: SEARCH-002
 title: 검색 결과 화면에서 정렬 옵션을 변경할 수 있다
 tags: [regression, search]
-last_verified: "2026-07-10"
+last_verified: "2026-07-11"
 steps:
   - action: navigate
     target: home_page
-  - action: click
-    target: header_search_button
   - action: fill
     target: search_input
     value: "${search.keyword_with_results}"
   - action: click
-    target: search_submit_button
+    target: header_search_button
   - action: click
     target: sort_popularity
   - action: assert_visible
