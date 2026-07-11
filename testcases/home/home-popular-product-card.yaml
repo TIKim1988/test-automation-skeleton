@@ -1,1 +1,11 @@
-
+id: HOME-005
+title: 인기상품 카드 클릭 시 상품 상세 페이지로 이동한다
+tags: [smoke, home]
+last_verified: "2026-07-11"
+steps:
+  - action: navigate
+    target: home_page
+  - action: click
+    target: popular_product_card
+  - action: assert_visible
+    target: add_to_cart_button
