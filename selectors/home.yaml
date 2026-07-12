@@ -2,6 +2,7 @@
 # 2026-07-10 실제 화면 확인 후 작성 (Claude in Chrome)
 # 2026-07-11 배너·인기상품·풋터 셀렉터 추가
 # 2026-07-11 nav_store: substring 오매칭 수정 (header a[href] CSS 셀렉터로 변경)
+# 2026-07-11 terms_page_heading, order_tracking_page_heading 추가
 
 pages:
   home_page: /
@@ -47,12 +48,12 @@ elements:
   # .home-banner-pagination 은 메인 히어로 배너에만 붙는 고유 클래스
   home_banner_pagination:
     css: .home-banner-pagination
-  # 현재 활성 배너 슬라이드의 클릭 링크 (배너 영역 section.max-w-7xl 한정)
+  # 현재 활성 슬라이드 링크를 가리킴 (배너 제일 위 section.max-w-7xl 내부)
   home_banner_active_slide_link:
     css: "section.max-w-7xl .swiper-slide-active a"
 
-  # ── 인기상품 ────────────────────────────────────────────────────────────
-  # tablist 를 가진 section(= 인기상품 영역)의 활성 탭 패널 안 상품 링크
+  # ── 인기상품 ──────────────────────────────────────────────────────────
+  # tablist 내 section(= 인기상품 섹션)의 첫 번째 슬라이드 활성 카드
   popular_product_card:
     css: "section:has([role='tablist']) .swiper-slide-active a[href*='/product/']"
 
@@ -69,3 +70,13 @@ elements:
   footer_cs_faq_link:
     role: link
     name: 자주 찾는 질문
+
+  # ── 이동 후 대상 페이지 헤딩 ────────────────────────────────────────
+  # 이용약관 페이지 (/legal/terms-of-use) 의 메인 제목
+  terms_page_heading:
+    role: heading
+    name: 로마스토어 이용약관
+  # 비회원 주문조회 페이지 (/information/order-tracking) 의 메인 제목
+  order_tracking_page_heading:
+    role: heading
+    name: 비회원 주문조회
