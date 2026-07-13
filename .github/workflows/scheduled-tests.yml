@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  actions: write
 
 jobs:
   test:
@@ -37,22 +38,33 @@ jobs:
         if: always()
         run: |
           node -e "
-            const fs = require('fs');
-            const r = JSON.parse(fs.readFileSync('test-results/results.json', 'utf8'));
-            const s = r.stats;
-            const failed = s.unexpected + s.flaky;
-            const lines = [
-              'passed=' + s.expected,
-              'failed=' + failed,
-              'skipped=' + s.skipped,
-              'icon=' + (failed > 0 ? '❌' : '✅'),
-            ];
-            fs.appendFileSync(process.env.GITHUB_OUTPUT, lines.join('\n') + '\n');
+          const fs = require('fs');
+          const r = JSON.parse(fs.readFileSync('test-results/results.json', 'utf8'));
+          const s = r.stats;
+          const failed = s.unexpected + s.flaky;
+          const lines = [
+            'passed=' + s.expected,
+            'failed=' + failed,
+            'skipped=' + s.skipped,
+            'icon=' + (failed > 0 ? '❌' : '✅'),
+          ];
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, lines.join('\n') + '\n');
           "
 
       - name: Zip HTML report
         if: always()
         run: zip -r playwright-report.zip playwright-report
+
+      - name: Delete previous report artifacts
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ids=$(gh api repos/${{ github.repository }}/actions/artifacts --paginate -q '.artifacts[] | select(.name=="playwright-report") | .id')
+          for id in $ids; do
+            echo "Deleting old artifact $id"
+            gh api -X DELETE repos/${{ github.repository }}/actions/artifacts/$id || true
+          done
 
       - name: Upload report artifact
         if: always()
@@ -60,7 +72,7 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report/
-          retention-days: 14
+          retention-days: 1
 
       - name: Email report
         if: always()
@@ -69,9 +81,9 @@ jobs:
           server_address: smtp.gmail.com
           server_port: 465
           secure: true
-          username: ${{ secrets.GMAIL_USERNAME }}
-          password: ${{ secrets.GMAIL_APP_PASSWORD }}
-          from: Playwright Automation <${{ secrets.GMAIL_USERNAME }}>
+          username: k39008116@gmail.com
+          password: ${{ secrets.GMAIL_SECRET_KEY }}
+          from: Playwright Automation <k39008116@gmail.com>
           to: k39008116@gmail.com
           subject: "${{ steps.summary.outputs.icon }} lomastore 자동화 결과 - 통과 ${{ steps.summary.outputs.passed }} / 실패 ${{ steps.summary.outputs.failed }} / 스킵 ${{ steps.summary.outputs.skipped }}"
           html_body: |
