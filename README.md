@@ -39,7 +39,8 @@
 │   │   ├── interpreter.ts     step -> 실제 Playwright 명령 변환/실행
 │   │   └── known-issues.ts    아직 실제 DOM에 없는 testId를 참조하는 테스트를 실패 대신 skip 처리
 │   ├── steps/custom.ts        YAML 기본 action으로 못 담는 로직 확장 지점
-│   └── tests/run-testcases.spec.ts  testcases/를 읽어 실행하는 진입점
+│   ├── tests/run-testcases.spec.ts  testcases/를 읽어 실행하는 진입점
+│   └── ci/sync-failure-issues.js    실패 테스트를 GitHub Issue로 동기화 (CI 전용)
 │
 ├── playwright.config.ts       baseURL: https://lomastore.com
 ├── package.json / package-lock.json
@@ -135,6 +136,21 @@ Secrets만 등록하면 바로 동작합니다.
   그 trace 안에 `fill()`로 입력한 값(비밀번호 포함)이 평문으로 남을 수 있습니다. 저장소가
   private이라 접근 범위는 제한되지만, 아티팩트를 외부와 공유할 계획이 있다면 로그인
   관련 실패 트레이스는 특히 주의하세요.
+
+## 실패 테스트 자동 이슈 등록
+
+`.github/workflows/scheduled-tests.yml`이 매일 테스트를 돌린 뒤,
+`automation/ci/sync-failure-issues.js`가 결과(`test-results/results.json`)를 보고
+GitHub Issue를 자동으로 관리합니다.
+
+- 테스트ID(예: `PRODUCT-004`)당 이슈를 **1개만** 유지합니다 (라벨: `test-failure`).
+- 처음 실패하면 새 이슈를 만들고, 같은 테스트가 계속 실패하면 새 이슈를 또 만드는 대신
+  기존 이슈에 코멘트만 추가합니다.
+- 그러다 통과로 돌아오면 해당 이슈를 코멘트와 함께 자동으로 닫습니다.
+- flaky(재시도 후 통과)와 skip(known-issues.ts 등)은 실패로 취급하지 않습니다.
+
+별도 설정 없이 워크플로 기본 `GITHUB_TOKEN`으로 동작합니다 (`permissions.issues: write` 필요,
+이미 워크플로에 반영되어 있음).
 
 ## 두 프로젝트로 쪼갤 때
 

@@ -8,6 +8,7 @@ on:
 permissions:
   contents: read
   actions: write
+  issues: write
 
 jobs:
   test:
@@ -53,6 +54,13 @@ jobs:
           ];
           fs.appendFileSync(process.env.GITHUB_OUTPUT, lines.join('\n') + '\n');
           "
+
+      - name: Sync failure issues
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: node automation/ci/sync-failure-issues.js
 
       - name: Delete previous report artifacts
         if: always()

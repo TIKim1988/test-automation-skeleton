@@ -1,0 +1,33 @@
+{
+  "suites": [
+    {
+      "title": "run-testcases.spec.ts",
+      "specs": [
+        {
+          "title": "HOME-001 - 홈페이지 접속 시 헤더 내비게이션과 인기상품 영역이 노출된다",
+          "tests": [ { "status": "expected", "results": [ { "error": null } ] } ]
+        },
+        {
+          "title": "HOME-002 - 인기상품 영역의 카테고리 탭을 클릭해도 에러 없이 전환된다",
+          "tests": [ { "status": "expected", "results": [ { "error": null } ] } ]
+        },
+        {
+          "title": "PRODUCT-004 - 로그인이 필요한 상품에 비로그인 상태로 접근하면 로그인 안내 화면이 노출된다",
+          "tests": [ { "status": "unexpected", "results": [ { "error": { "message": "Timed out waiting for selector [data-testid=login-guard]" } } ] } ]
+        },
+        {
+          "title": "CART-002 - 장바구니에서 수량 증가/감소 버튼을 누를 수 있다",
+          "tests": [ { "status": "unexpected", "results": [ { "error": { "message": "expect(locator).toBeVisible() failed" } } ] } ]
+        },
+        {
+          "title": "SEARCH-002 - 검색 결과 화면에서 정렬 옵션을 변경할 수 있다",
+          "tests": [ { "status": "flaky", "results": [ { "error": { "message": "timeout" } }, { "error": null } ] } ]
+        },
+        {
+          "title": "PRODUCT-001 - 상품 상세 페이지에 상품명/수량조절/장바구니담기 버튼이 노출된다",
+          "tests": [ { "status": "skipped", "results": [] } ]
+        }
+      ]
+    }
+  ]
+}
