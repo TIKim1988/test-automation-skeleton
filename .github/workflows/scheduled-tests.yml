@@ -32,6 +32,9 @@ jobs:
         id: tests
         run: npx playwright test
         continue-on-error: true
+        env:
+          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
 
       - name: Summarize results
         id: summary

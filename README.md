@@ -98,6 +98,44 @@ npx playwright test # lomastore.com 대상, 29개
 결제(실제 결제 트리거) 버튼은 테스트케이스에서부터 `assert_visible`까지만 사용하고 클릭하지
 않는 원칙을 유지합니다 (`checkout-final-pay-button-visible.yaml` 참고).
 
+## 인증 정보(자격증명) 다루기
+
+로그인이 필요한 시나리오를 추가하면 아이디/비밀번호 같은 값이 필요해지는데, 이런 값은
+**절대 `fixtures/`나 `testcases/`에 실제 값으로 커밋하지 않습니다.** 대신 템플릿 문자열에서
+`${env.VAR_NAME}` 문법을 쓰면 `process.env`에서 값을 읽어옵니다 (`${user.email}`처럼
+fixtures를 참조하는 기존 문법과 별개로 동작, `automation/runner/loader.ts`의
+`resolveTemplate` 참고).
+
+```yaml
+# testcases/login/login-valid.yaml 예시
+steps:
+  - action: fill
+    target: email_input
+    value: "${env.TEST_USER_EMAIL}"
+  - action: fill
+    target: password_input
+    value: "${env.TEST_USER_PASSWORD}"
+```
+
+**로컬 실행**: `.env.example`을 복사해 `.env`로 만들고 값을 채우세요 (`cp .env.example .env`).
+`.env`는 `.gitignore`에 포함되어 있어 git에 올라가지 않고, `playwright.config.ts`가
+`dotenv`로 자동 로드합니다.
+
+**CI(GitHub Actions) 실행**: 저장소 Settings → Secrets and variables → Actions에서
+`TEST_USER_EMAIL`, `TEST_USER_PASSWORD`를 등록하세요 (값은 암호화 저장되고 로그에 자동
+마스킹됩니다). `.github/workflows/scheduled-tests.yml`의 테스트 실행 스텝에 이미
+`env: TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}` 형태로 주입하도록 준비되어 있어서,
+Secrets만 등록하면 바로 동작합니다.
+
+**계정/보관 관련 권장사항**
+- 실제 개인정보·결제수단이 연결된 계정 말고, 이 자동화 전용 테스트 계정을 따로 만들어 쓰세요.
+- 환경변수가 설정되지 않은 채로 `${env.*}`를 참조하면 `resolveTemplate`이 즉시 에러를
+  던지므로, 빈 문자열로 조용히 로그인 실패하는 대신 원인이 명확한 에러로 바로 드러납니다.
+- `playwright.config.ts`의 `trace: 'retain-on-failure'` 때문에, 로그인 스텝이 실패하면
+  그 trace 안에 `fill()`로 입력한 값(비밀번호 포함)이 평문으로 남을 수 있습니다. 저장소가
+  private이라 접근 범위는 제한되지만, 아티팩트를 외부와 공유할 계획이 있다면 로그인
+  관련 실패 트레이스는 특히 주의하세요.
+
 ## 두 프로젝트로 쪼갤 때
 
 지금은 한 저장소에 다 들어있지만, 실제로 "테스트케이스 관리" repo와 "자동화" repo를 분리하고
