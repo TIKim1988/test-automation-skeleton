@@ -4,6 +4,7 @@ import { loadTestCases, loadFixtures } from '../runner/loader';
 import { loadSelectors } from '../runner/selectors';
 import { runTestCase } from '../runner/interpreter';
 import { customSteps } from '../steps/custom';
+import { buildHealContext } from '../runner/healing/resolver';
 import { pendingTestIds } from '../runner/known-issues';
 import type { TestCase } from '../runner/types';
 
@@ -34,6 +35,7 @@ for (const testCase of testCases) {
   test(`${testCase.id} - ${testCase.title}`, async ({ page }) => {
     test.skip(Boolean(pendingReason), pendingReason);
     page.on('dialog', (dialog) => dialog.dismiss());
-    await runTestCase(page, testCase, selectors, fixtures, customSteps);
+    const ctx = buildHealContext({ testId: testCase.id });
+    await runTestCase(page, testCase, selectors, fixtures, customSteps, ctx);
   });
 }

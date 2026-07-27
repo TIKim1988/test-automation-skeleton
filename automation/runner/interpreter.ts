@@ -2,25 +2,30 @@ import type { Page, Locator } from '@playwright/test';
 import { expect } from '@playwright/test';
 import type { ElementDef, SelectorMap, Step, TestCase } from './types';
 import { resolveTemplate } from './loader';
+import { resolveLocator } from './healing/resolver';
+import type { HealContext } from './healing/types';
 
 export type CustomStepFn = (page: Page, step: Step, ctx: Record<string, unknown>) => Promise<void>;
-
-function resolveLocator(page: Page, def: ElementDef): Locator {
-  let locator: Locator;
-  if (def.testId) locator = page.getByTestId(def.testId);
-  else if (def.role) locator = page.getByRole(def.role as Parameters<Page['getByRole']>[0], def.name ? { name: def.name } : undefined);
-  else if (def.text) locator = page.getByText(def.text);
-  else if (def.css) locator = page.locator(def.css);
-  else throw new Error(`셀렉터 정의에 role/testId/text/css 중 하나가 필요합니다: ${JSON.stringify(def)}`);
-  // index 필드가 있으면 nth()로 특정 인덱스 요소만 선택 (strict mode 위반 방지)
-  return typeof def.index === 'number' ? locator.nth(def.index) : locator;
-}
 
 function requireElement(selectors: SelectorMap, target?: string): ElementDef {
   if (!target || !selectors.elements[target]) {
     throw new Error(`selectors 파일에 정의되지 않은 element target 입니다: ${target}`);
   }
   return selectors.elements[target];
+}
+
+// 요소를 잡는 모든 지점이 통과하는 단일 경로.
+// STEP 1: 힐링 모듈의 resolveLocator 로 primary 로케이터만 받아온다 (동작 동일).
+// STEP 3~5 에서 resolver.ts 내부만 바꾸면 여기 전체에 힐링이 적용된다.
+async function loc(
+  page: Page,
+  selectors: SelectorMap,
+  target: string | undefined,
+  ctx: HealContext,
+): Promise<Locator> {
+  const def = requireElement(selectors, target);
+  const { locator } = await resolveLocator(page, target as string, def, ctx);
+  return locator;
 }
 
 // 테스트케이스 yaml의 steps를 한 줄씩 실제 Playwright 동작으로 변환/실행합니다.
@@ -30,7 +35,8 @@ export async function runTestCase(
   testCase: TestCase,
   selectors: SelectorMap,
   data: Record<string, unknown>,
-  customSteps: Record<string, CustomStepFn> = {}
+  customSteps: Record<string, CustomStepFn> = {},
+  ctx: HealContext
 ): Promise<void> {
   for (const step of testCase.steps) {
     const value = step.value !== undefined ? resolveTemplate(step.value, data) : undefined;
@@ -43,28 +49,28 @@ export async function runTestCase(
         break;
       }
       case 'click':
-        await resolveLocator(page, requireElement(selectors, step.target)).click();
+        await (await loc(page, selectors, step.target, ctx)).click();
         break;
       case 'fill':
-        await resolveLocator(page, requireElement(selectors, step.target)).fill(value ?? '');
+        await (await loc(page, selectors, step.target, ctx)).fill(value ?? '');
         break;
       case 'select':
-        await resolveLocator(page, requireElement(selectors, step.target)).selectOption(value ?? '');
+        await (await loc(page, selectors, step.target, ctx)).selectOption(value ?? '');
         break;
       case 'check':
-        await resolveLocator(page, requireElement(selectors, step.target)).check();
+        await (await loc(page, selectors, step.target, ctx)).check();
         break;
       case 'uncheck':
-        await resolveLocator(page, requireElement(selectors, step.target)).uncheck();
+        await (await loc(page, selectors, step.target, ctx)).uncheck();
         break;
       case 'assert_visible':
-        await expect(resolveLocator(page, requireElement(selectors, step.target))).toBeVisible();
+        await expect(await loc(page, selectors, step.target, ctx)).toBeVisible();
         break;
       case 'assert_hidden':
-        await expect(resolveLocator(page, requireElement(selectors, step.target))).toBeHidden();
+        await expect(await loc(page, selectors, step.target, ctx)).toBeHidden();
         break;
       case 'assert_text':
-        await expect(resolveLocator(page, requireElement(selectors, step.target))).toHaveText(value ?? '');
+        await expect(await loc(page, selectors, step.target, ctx)).toHaveText(value ?? '');
         break;
       case 'wait':
         await page.waitForTimeout(step.timeoutMs ?? 1000);
