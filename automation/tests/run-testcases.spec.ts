@@ -6,6 +6,7 @@ import { runTestCase } from '../runner/interpreter';
 import { customSteps } from '../steps/custom';
 import { buildHealContext } from '../runner/healing/resolver';
 import { createHealRecorder } from '../runner/healing/recorder';
+import { loadBaseline, saveBaseline, mergeFingerprint, type BaselineStore } from '../runner/healing/baseline';
 import { pendingTestIds } from '../runner/known-issues';
 import type { TestCase } from '../runner/types';
 
@@ -23,9 +24,20 @@ const fixtures = loadFixtures(path.join(ROOT, 'fixtures'));
 const healRecorder = createHealRecorder();
 const HEAL_REPORT_PATH = path.join(ROOT, 'test-results', 'heal-report.json');
 
+// STEP 3: 이전 초록 실행에서 뜬 지문 baseline 을 읽어 각 테스트 ctx 에 주입(STEP 4 폴백 재료).
+// HEAL_CAPTURE=1 로 돌리면 이번 실행에서 지문을 다시 떠 baseline.json 을 갱신한다.
+const BASELINE_PATH = path.join(ROOT, 'automation', 'runner', 'healing', 'baseline.json');
+const HEAL_CAPTURE = process.env.HEAL_CAPTURE === '1';
+const baseline: BaselineStore = loadBaseline(BASELINE_PATH);
+let captured: BaselineStore = { ...baseline };
+
 test.afterAll(async () => {
   const report = healRecorder.flush(HEAL_REPORT_PATH);
   console.log(`[heal] total heals: ${report.totalHeals} -> ${HEAL_REPORT_PATH}`);
+  if (HEAL_CAPTURE) {
+    saveBaseline(BASELINE_PATH, captured);
+    console.log(`[heal] baseline captured: ${Object.keys(captured).length} elements -> ${BASELINE_PATH}`);
+  }
 });
 
 // 테스트케이스가 참조하는 요소 중 하나라도 아직 실제 DOM에 없는 testId(known-issues.ts 참고)를
@@ -46,7 +58,12 @@ for (const testCase of testCases) {
   test(`${testCase.id} - ${testCase.title}`, async ({ page }) => {
     test.skip(Boolean(pendingReason), pendingReason);
     page.on('dialog', (dialog) => dialog.dismiss());
-    const ctx = buildHealContext({ testId: testCase.id, onHeal: healRecorder.onHeal });
+    const ctx = buildHealContext({
+      testId: testCase.id,
+      baseline,
+      onHeal: healRecorder.onHeal,
+      onCapture: (name, fp) => { captured = mergeFingerprint(captured, name, fp); },
+    });
     await runTestCase(page, testCase, selectors, fixtures, customSteps, ctx);
   });
 }

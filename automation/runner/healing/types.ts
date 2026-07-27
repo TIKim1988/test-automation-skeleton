@@ -64,8 +64,14 @@ export interface HealContext {
   /** 이 테스트에서 지금까지 힐링된 횟수. MAX_HEALS_PER_TEST 가드레일용 (STEP 5) */
   healCount: number;
 
-  /** 논리 이름 -> 지문. STEP 3 에서 주입 */
+  /** 논리 이름 -> 지문. STEP 3 에서 주입 (이전 초록 실행에서 뜬 baseline) */
   baseline?: Record<string, Fingerprint>;
+
+  /** 지문 캡처 모드 여부. 기본 off(=STEP 2 와 동작 동일). HEAL_CAPTURE=1 일 때만 on */
+  captureEnabled?: boolean;
+
+  /** 초록 실행에서 지문을 떴을 때의 적립 콜백 (STEP 3). spec 이 baseline 저장소에 연결 */
+  onCapture?: (logicalName: string, fp: Fingerprint) => void;
 
   /** 힐링 발생 시 콜백. STEP 2 의 recorder 가 연결 */
   onHeal?: (event: HealEvent) => void;

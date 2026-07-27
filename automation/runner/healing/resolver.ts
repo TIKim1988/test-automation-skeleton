@@ -1,6 +1,8 @@
 import type { Page, Locator } from '@playwright/test';
 import type { ElementDef } from '../types';
-import type { HealContext, HealResult, HealMode, HealEvent } from './types';
+import type { HealContext, HealResult, HealMode, HealEvent, Fingerprint } from './types';
+import type { BaselineStore } from './baseline';
+import { isResolvable, captureFingerprint, expectsPresence } from './capture';
 
 /**
  * selectors/ 의 ElementDef 를 실제 Playwright Locator 로 만든다.
@@ -45,8 +47,20 @@ export async function resolveLocator(
   def: ElementDef,
   ctx: HealContext,
 ): Promise<HealResult> {
-  // --- STEP 1: primary 만 ---
   const locator = buildPrimaryLocator(page, def);
+
+  // --- STEP 3: 감지 + 지문 캡처 (부수효과) ---
+  // 캡처 모드(HEAL_CAPTURE=1)이고 "요소가 있어야 정상"인 액션일 때만, primary 를
+  // 짧게 감지해서 잡히면 지문을 떠 baseline 에 적립한다. 액션에 실제로 쓰이는 로케이터는
+  // 여전히 primary 이므로 통과/실패 결과는 바뀌지 않는다. (assert_hidden 등 부재가
+  // 정상인 액션은 expectsPresence 로 애초에 제외 → 불필요한 프로브 타임아웃도 없음.)
+  if (ctx.captureEnabled && expectsPresence(ctx.action)) {
+    if (await isResolvable(locator)) {
+      const fp: Fingerprint | undefined = await captureFingerprint(locator);
+      if (fp) ctx.onCapture?.(logicalName, fp);
+    }
+  }
+
   return {
     locator,
     used: 'primary',
@@ -54,19 +68,18 @@ export async function resolveLocator(
     confidence: 1,
   };
 
-  // --- STEP 3~5 에서 대략 이렇게 확장된다 (지금은 실행되지 않음) ---
+  // --- STEP 4~5 에서 이 아래로 확장된다 (지금은 실행되지 않음) ---
   //
-  // const primary = buildPrimaryLocator(page, def);
-  // if (await isResolvable(primary)) {
-  //   return { locator: primary, used: 'primary', healed: false, confidence: 1 };
+  // if (await isResolvable(locator)) {
+  //   return { locator, used: 'primary', healed: false, confidence: 1 };
   // }
-  // const fp = ctx.baseline?.[logicalName];
-  // for (const cand of buildCandidates(page, fp)) {           // testid -> role -> label -> text
+  // const fp = ctx.baseline?.[logicalName];                    // STEP 3 가 적립한 지문
+  // for (const cand of buildCandidates(page, fp)) {            // testid -> role -> label -> text
   //   const loc = cand.build();
   //   if (!(await isUniqueMatch(loc))) continue;
   //   const score = scoreCandidate(cand, fp);
   //   if (score < THRESHOLD) continue;
-  //   if (ctx.mode === 'strict') { recordAndThrow(...); }     // 배포 게이트: 힐링=실패
+  //   if (ctx.mode === 'strict') { recordAndThrow(...); }      // 배포 게이트: 힐링=실패
   //   ctx.healCount++;
   //   if (ctx.healCount > MAX_HEALS_PER_TEST) throwTooManyHeals(ctx);
   //   ctx.onHeal?.({ ...healEvent });
@@ -82,7 +95,9 @@ export async function resolveLocator(
 export function buildHealContext(args: {
   testId: string;
   mode?: HealMode;
+  baseline?: BaselineStore;
   onHeal?: (event: HealEvent) => void;
+  onCapture?: (logicalName: string, fp: Fingerprint) => void;
 }): HealContext {
   return {
     testId: args.testId,
@@ -90,6 +105,9 @@ export function buildHealContext(args: {
     stepIndex: 0,
     mode: args.mode ?? (process.env.HEAL_MODE === 'strict' ? 'strict' : 'lenient'),
     healCount: 0,
+    baseline: args.baseline,
+    captureEnabled: process.env.HEAL_CAPTURE === '1',
     onHeal: args.onHeal,
+    onCapture: args.onCapture,
   };
 }

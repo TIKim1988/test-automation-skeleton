@@ -38,8 +38,13 @@ export async function runTestCase(
   customSteps: Record<string, CustomStepFn> = {},
   ctx: HealContext
 ): Promise<void> {
-  for (const step of testCase.steps) {
+  for (let stepIndex = 0; stepIndex < testCase.steps.length; stepIndex++) {
+    const step = testCase.steps[stepIndex];
     const value = step.value !== undefined ? resolveTemplate(step.value, data) : undefined;
+
+    // STEP 3: 감지/캡처가 현재 스텝을 알 수 있도록 ctx 에 위치 정보를 실어준다.
+    ctx.action = step.action;
+    ctx.stepIndex = stepIndex;
 
     switch (step.action) {
       case 'navigate': {
