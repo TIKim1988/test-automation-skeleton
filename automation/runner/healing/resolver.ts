@@ -1,6 +1,6 @@
 import type { Page, Locator } from '@playwright/test';
 import type { ElementDef } from '../types';
-import type { HealContext, HealResult, HealMode } from './types';
+import type { HealContext, HealResult, HealMode, HealEvent } from './types';
 
 /**
  * selectors/ 의 ElementDef 를 실제 Playwright Locator 로 만든다.
@@ -82,6 +82,7 @@ export async function resolveLocator(
 export function buildHealContext(args: {
   testId: string;
   mode?: HealMode;
+  onHeal?: (event: HealEvent) => void;
 }): HealContext {
   return {
     testId: args.testId,
@@ -89,5 +90,6 @@ export function buildHealContext(args: {
     stepIndex: 0,
     mode: args.mode ?? (process.env.HEAL_MODE === 'strict' ? 'strict' : 'lenient'),
     healCount: 0,
+    onHeal: args.onHeal,
   };
 }
