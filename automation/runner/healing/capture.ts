@@ -37,6 +37,22 @@ export async function isResolvable(
  * 요소의 지문을 캡처한다. 실패해도(요소 없음 등) 던지지 않고 undefined 를 돌려준다.
  * — 캡처는 어디까지나 부수효과이므로 테스트 흐름을 절대 깨면 안 된다.
  */
+/**
+ * 후보가 "딱 하나"의 요소를 가리키는지 확인한다. 여러 개를 잡으면 어느 걸 클릭할지
+ * 모호하므로 힐링 후보로 쓰지 않는다(STEP 4). 못 찾거나 0개/복수면 false.
+ */
+export async function isUniqueMatch(
+  locator: Locator,
+  timeoutMs: number = PROBE_TIMEOUT_MS,
+): Promise<boolean> {
+  try {
+    await locator.first().waitFor({ state: 'attached', timeout: timeoutMs });
+    return (await locator.count()) === 1;
+  } catch {
+    return false;
+  }
+}
+
 export async function captureFingerprint(locator: Locator): Promise<Fingerprint | undefined> {
   try {
     const el = locator.first();
