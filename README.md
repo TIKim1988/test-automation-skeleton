@@ -6,7 +6,7 @@
 # 테스트케이스 <-> 자동화 연동 뼈대
 
 같은 저장소 안에 "테스트케이스 관리" 영역과 "자동화 실행" 영역을 분리해두고,
-그 사이를 YAML 하나로 연결하는 구조입니다. 현재는 lomastore.com 실 사이트를 대상으로
+스프레드시트 친화적인 CSV 원본에서 실행용 YAML을 생성하는 구조입니다. 현재는 lomastore.com 실 사이트를 대상으로
 한 테스트케이스/자동화가 실제로 구축되어 있습니다.
 
 ## 폴더 구조
@@ -29,6 +29,10 @@
 ├── fixtures/
 │   └── lomastore.yaml         검색어, 상품 slug, 주문자 정보 등 테스트 데이터
 │
+├── testcase-management/       테스트케이스 원본(CSV: Excel·Google Sheets에서 편집 가능)
+│   ├── test-cases.csv         시나리오 메타데이터
+│   └── steps.csv              실행 스텝
+│
 ├── automation/                 자동화 프로젝트 소유
 │   ├── runner/
 │   │   ├── types.ts            Step/TestCase/SelectorMap 타입
@@ -48,12 +52,24 @@
 
 | 경로 | 소유 프로젝트 | 역할 |
 |---|---|---|
-| `testcases/**/*.yaml` | 테스트케이스 관리 | 사람이 읽는 시나리오. 동시에 자동화가 그대로 실행하는 스펙 |
+| `testcase-management/*.csv` | 테스트케이스 관리 | Excel·Google Sheets에서 편집하는 테스트케이스 원본 |
+| `testcases/**/*.yaml` | 자동 생성물 | CSV 원본에서 생성되는, 자동화가 실행하는 스펙 |
 | `selectors/*.yaml` | 테스트케이스 관리 | 화면 요소 이름 -> 실제 셀렉터(role/testId/css) 매핑 |
 | `fixtures/*.yaml` | 테스트케이스 관리 | 테스트에 쓰이는 실제 데이터 |
 | `automation/runner/*` | 자동화 | YAML을 읽어 Playwright 명령으로 변환하는 인터프리터, known-issues 처리 |
 | `automation/steps/custom.ts` | 자동화 | YAML 기본 동작으로 못 담는 복잡한 로직 확장 지점 |
 | `automation/tests/*.spec.ts` | 자동화 | 위 인터프리터를 실제로 구동하는 Playwright 테스트 진입점 |
+
+## 테스트케이스 편집
+
+`testcase-management/test-cases.csv`, `testcase-management/steps.csv`를 Excel 또는 Google Sheets로 열어 수정합니다. CSV 원본을 저장소에 다시 반영한 뒤 아래 명령으로 실행 YAML을 생성합니다.
+
+```bash
+npm run testcases:import
+npm run testcases:check
+```
+
+자세한 열 정의와 편집 규칙은 [testcase-management/README.md](testcase-management/README.md)를 참고하세요.
 
 ## 핵심 아이디어
 
@@ -87,7 +103,11 @@
 npm install
 npx playwright install --with-deps chromium   # 최초 1회
 npx playwright test                            # lomastore.com 대상, 23개
+npm run test:smoke                             # 매일 실행하는 핵심 8개
+npm run test:regression                        # 회귀 테스트만 수동 실행
 ```
+
+GitHub Actions는 매일 한국 시간 09:00에 smoke만 실행합니다. regression/all은 Actions의 **Run workflow**에서 선택해 실행합니다.
 
 로그인 자체는 현재 스코프에서 제외되어 있습니다 (`selectors/signin.yaml` 참고 — 비로그인
 상태에서 인증이 필요한 동작을 했을 때 로그인 화면으로 정상 리다이렉트되는지만 확인). 실제

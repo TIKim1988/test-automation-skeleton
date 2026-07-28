@@ -7,7 +7,10 @@ export type CustomStepFn = (page: Page, step: Step, ctx: Record<string, unknown>
 
 function resolveLocator(page: Page, def: ElementDef): Locator {
   if (def.testId) return page.getByTestId(def.testId);
-  if (def.role) return page.getByRole(def.role as Parameters<Page['getByRole']>[0], def.name ? { name: def.name } : undefined);
+  if (def.role) {
+    const name = def.nameRegex ? new RegExp(def.nameRegex) : def.name;
+    return page.getByRole(def.role as Parameters<Page['getByRole']>[0], name ? { name, exact: def.exact } : undefined);
+  }
   if (def.text) return page.getByText(def.text);
   if (def.css) return page.locator(def.css);
   throw new Error(`셀렉터 정의에 role/testId/text/css 중 하나가 필요합니다: ${JSON.stringify(def)}`);

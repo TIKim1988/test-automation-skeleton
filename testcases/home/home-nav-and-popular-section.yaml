@@ -1,6 +1,11 @@
 id: HOME-001
 title: 홈페이지 접속 시 헤더 내비게이션과 인기상품 영역이 노출된다
-tags: [smoke, home]
+tags:
+  - smoke
+  - home
+priority: P1
+status: active
+enabled: true
 last_verified: "2026-07-10"
 steps:
   - action: navigate

@@ -1,6 +1,11 @@
 id: SEARCH-002
 title: 검색 결과 화면에서 정렬 옵션을 변경할 수 있다
-tags: [regression, search]
+tags:
+  - regression
+  - search
+priority: P2
+status: active
+enabled: true
 last_verified: "2026-07-10"
 steps:
   - action: navigate
@@ -9,7 +14,7 @@ steps:
     target: header_search_button
   - action: fill
     target: search_input
-    value: "${search.keyword_with_results}"
+    value: ${search.keyword_with_results}
   - action: click
     target: search_submit_button
   - action: click

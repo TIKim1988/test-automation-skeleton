@@ -1,13 +1,18 @@
 id: PRODUCT-001
 title: 상품 상세 페이지에 상품명/수량조절/장바구니담기 버튼이 노출된다
-tags: [smoke, product]
+tags:
+  - smoke
+  - product
+priority: P1
+status: active
+enabled: true
 last_verified: "2026-07-10"
 steps:
   - action: navigate
     target: product_guest_accessible_page
   - action: assert_text
     target: product_title
-    value: "${product.guest_accessible_name}"
+    value: ${product.guest_accessible_name}
   - action: assert_visible
     target: quantity_decrease_button
   - action: assert_visible

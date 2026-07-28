@@ -1,6 +1,11 @@
 id: HOME-002
 title: 인기상품 영역의 카테고리 탭을 클릭해도 에러 없이 전환된다
-tags: [regression, home]
+tags:
+  - regression
+  - home
+priority: P2
+status: active
+enabled: true
 last_verified: "2026-07-10"
 steps:
   - action: navigate

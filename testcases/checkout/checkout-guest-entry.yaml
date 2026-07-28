@@ -1,6 +1,11 @@
 id: CHECKOUT-001
 title: 비로그인 상태에서도 장바구니의 주문하기를 통해 주문서 화면에 진입할 수 있다
-tags: [smoke, checkout]
+tags:
+  - smoke
+  - checkout
+priority: P1
+status: active
+enabled: true
 last_verified: "2026-07-10"
 steps:
   - action: navigate

@@ -8,15 +8,19 @@ elements:
   nav_store:
     role: link
     name: 스토어
+    exact: true
   nav_curation:
     role: link
     name: 큐레이션
+    exact: true
   nav_event:
     role: link
     name: 이벤트
+    exact: true
   nav_blog:
     role: link
     name: 블로그
+    exact: true
   header_login_link:
     role: link
     name: 로그인

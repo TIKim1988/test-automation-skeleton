@@ -2,8 +2,19 @@ name: Scheduled Playwright Tests
 
 on:
   schedule:
-    - cron: '0 */6 * * *'
-  workflow_dispatch: {}
+    # 매일 한국 시간 09:00 (UTC 00:00)에 핵심 smoke 테스트만 실행합니다.
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: '실행할 테스트 범위'
+        required: true
+        default: smoke
+        type: choice
+        options:
+          - smoke
+          - regression
+          - all
 
 permissions:
   contents: read
@@ -24,8 +35,21 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Validate spreadsheet source and generated YAML
+        run: npm run testcases:check
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
+
+      - name: Select test suite
+        run: |
+          suite="${{ github.event_name == 'schedule' && 'smoke' || inputs.suite }}"
+          if [ "$suite" = "all" ]; then
+            echo "TEST_TAGS=" >> "$GITHUB_ENV"
+          else
+            echo "TEST_TAGS=$suite" >> "$GITHUB_ENV"
+          fi
+          echo "Running suite: $suite"
 
       - name: Run Playwright tests
         id: tests
@@ -35,20 +59,7 @@ jobs:
       - name: Summarize results
         id: summary
         if: always()
-        run: |
-          node -e "
-            const fs = require('fs');
-            const r = JSON.parse(fs.readFileSync('test-results/results.json', 'utf8'));
-            const s = r.stats;
-            const failed = s.unexpected + s.flaky;
-            const lines = [
-              'passed=' + s.expected,
-              'failed=' + failed,
-              'skipped=' + s.skipped,
-              'icon=' + (failed > 0 ? '❌' : '✅'),
-            ];
-            fs.appendFileSync(process.env.GITHUB_OUTPUT, lines.join('\n') + '\n');
-          "
+        run: node scripts/summarize-results.mjs
 
       - name: Zip HTML report
         if: always()
@@ -75,15 +86,10 @@ jobs:
           to: k39008116@gmail.com
           subject: "${{ steps.summary.outputs.icon }} lomastore 자동화 결과 - 통과 ${{ steps.summary.outputs.passed }} / 실패 ${{ steps.summary.outputs.failed }} / 스킵 ${{ steps.summary.outputs.skipped }}"
           html_body: |
-            <p>lomastore.com 자동화 테스트 결과입니다.</p>
-            <ul>
-              <li>통과: ${{ steps.summary.outputs.passed }}</li>
-              <li>실패: ${{ steps.summary.outputs.failed }}</li>
-              <li>스킵: ${{ steps.summary.outputs.skipped }}</li>
-            </ul>
-            <p>실행 로그: <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}</a></p>
-            <p>상세 HTML 리포트는 첨부파일을 확인해주세요.</p>
-          attachments: playwright-report.zip
+            <p>실행 결과는 첨부된 <code>playwright-report.zip</code>의 <code>index.html</code>에서 확인하세요.</p>
+            <p>통과: ${{ steps.summary.outputs.passed }} / 실패: ${{ steps.summary.outputs.failed }} / 스킵: ${{ steps.summary.outputs.skipped }}</p>
+            <p>실패 목록과 오류 첫 줄은 <code>email-summary.html</code> 첨부파일에서 확인하세요.</p>
+          attachments: playwright-report.zip,test-results/email-summary.html
 
       - name: Fail job if tests failed
         if: steps.summary.outputs.failed != '0'

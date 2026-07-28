@@ -12,7 +12,16 @@ import type { TestCase } from '../runner/types';
 // 같은 저장소를 공유하므로 여기서는 경로만 알면 됩니다. (내용은 절대 직접 고치지 않음)
 const ROOT = path.resolve(__dirname, '../..');
 
-const testCases: TestCase[] = loadTestCases(path.join(ROOT, 'testcases'));
+const requestedTags = (process.env.TEST_TAGS ?? '')
+  .split(',')
+  .map((tag) => tag.trim())
+  .filter(Boolean);
+
+const testCases: TestCase[] = loadTestCases(path.join(ROOT, 'testcases')).filter((testCase) => {
+  if (testCase.enabled === false || testCase.status === 'manual') return false;
+  if (requestedTags.length === 0) return true;
+  return requestedTags.some((tag) => testCase.tags?.includes(tag));
+});
 const selectors = loadSelectors(path.join(ROOT, 'selectors'));
 const fixtures = loadFixtures(path.join(ROOT, 'fixtures'));
 

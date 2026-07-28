@@ -1,6 +1,11 @@
 id: STORE-002
 title: 카테고리 상품 목록의 정렬 옵션을 변경할 수 있다
-tags: [regression, store]
+tags:
+  - regression
+  - store
+priority: P2
+status: active
+enabled: true
 last_verified: "2026-07-10"
 steps:
   - action: navigate

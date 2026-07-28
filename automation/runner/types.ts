@@ -24,6 +24,10 @@ export interface TestCase {
   id: string;
   title: string;
   tags?: string[];
+  priority?: 'P1' | 'P2' | 'P3';
+  status?: 'active' | 'quarantine' | 'manual';
+  enabled?: boolean;
+  precondition?: string;
   last_verified?: string;
   steps: Step[];
   file: string; // loader가 채워주는 원본 경로
@@ -32,6 +36,8 @@ export interface TestCase {
 export interface ElementDef {
   role?: string;
   name?: string;
+  nameRegex?: string;
+  exact?: boolean;
   testId?: string;
   css?: string;
   text?: string;

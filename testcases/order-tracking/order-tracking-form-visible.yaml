@@ -1,8 +1,11 @@
-# 주의: 이 화면은 Cloudflare Turnstile 봇 감지가 걸려있다. 조회하기 버튼을 클릭/제출하는 것은
-# 봇 감지 우회에 해당할 수 있으므로 이 테스트케이스는 입력란/버튼이 노출되는지까지만 확인한다.
 id: ORDER-001
 title: 비회원 주문조회 화면에 주문번호/이메일 입력란과 조회 버튼이 노출된다
-tags: [regression, order-tracking]
+tags:
+  - regression
+  - order-tracking
+priority: P2
+status: active
+enabled: true
 last_verified: "2026-07-10"
 steps:
   - action: navigate

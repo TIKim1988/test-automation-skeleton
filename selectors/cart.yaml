@@ -32,7 +32,7 @@ elements:
   # 실제 접근성 이름은 "N개 상품 주문하기" (N은 담긴 수량에 따라 동적) - 자동화 쪽에서 부분/정규식 일치 필요
   order_button:
     role: button
-    name: 상품 주문하기
+    nameRegex: "상품 주문하기$"
   wishlist_button:
     role: button
     name: 찜하기

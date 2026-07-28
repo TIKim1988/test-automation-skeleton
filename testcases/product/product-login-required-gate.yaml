@@ -1,9 +1,11 @@
-# 참고: 19세 성인인증/로그인이 필요한 상품(예: 로마 글로스 2 + 리리러피 젤)은
-# 비로그인 상태로 상세페이지에 접근하면 "로그인이 필요한 상품이에요." 안내와 함께
-# 로그인 화면으로 유도된다. 실제 로그인 시나리오 자체는 범위에서 제외한다(로그인 케이스는 별도 작성 예정).
 id: PRODUCT-004
 title: 로그인이 필요한 상품에 비로그인 상태로 접근하면 로그인 안내 화면이 노출된다
-tags: [regression, product]
+tags:
+  - regression
+  - product
+priority: P2
+status: active
+enabled: true
 last_verified: "2026-07-10"
 steps:
   - action: navigate

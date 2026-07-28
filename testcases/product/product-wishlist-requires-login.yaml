@@ -1,8 +1,11 @@
-# 참고: 찜하기(위시리스트) 버튼은 비로그인 상태에서 클릭하면 로그인 화면(/signin)으로 리다이렉트된다.
-# 실제 로그인 수행 자체는 범위에서 제외한다 (리다이렉트 여부만 확인).
 id: PRODUCT-005
 title: 비로그인 상태에서 찜하기 버튼을 누르면 로그인 화면으로 이동한다
-tags: [regression, product]
+tags:
+  - regression
+  - product
+priority: P2
+status: active
+enabled: true
 last_verified: "2026-07-10"
 steps:
   - action: navigate

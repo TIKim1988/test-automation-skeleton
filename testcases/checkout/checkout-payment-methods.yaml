@@ -1,6 +1,11 @@
 id: CHECKOUT-003
 title: 주문서 화면에서 결제 수단을 선택할 수 있다
-tags: [regression, checkout]
+tags:
+  - regression
+  - checkout
+priority: P2
+status: active
+enabled: true
 last_verified: "2026-07-10"
 steps:
   - action: navigate

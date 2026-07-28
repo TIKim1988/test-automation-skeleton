@@ -3,7 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "test": "playwright test"
+    "test": "playwright test",
+    "test:smoke": "TEST_TAGS=smoke playwright test",
+    "test:regression": "TEST_TAGS=regression playwright test",
+    "testcases:export": "node scripts/sync-testcases.mjs export",
+    "testcases:import": "node scripts/sync-testcases.mjs import",
+    "testcases:check": "node scripts/sync-testcases.mjs import --check"
   },
   "devDependencies": {
     "@playwright/test": "^1.47.0",

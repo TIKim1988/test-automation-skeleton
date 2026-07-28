@@ -1,6 +1,11 @@
 id: CHECKOUT-002
 title: 주문서 화면에 주문자 정보와 배송지 정보 입력란이 노출되고 입력할 수 있다
-tags: [regression, checkout]
+tags:
+  - regression
+  - checkout
+priority: P2
+status: active
+enabled: true
 last_verified: "2026-07-10"
 steps:
   - action: navigate
@@ -13,18 +18,18 @@ steps:
     target: order_button
   - action: fill
     target: orderer_name_input
-    value: "${checkout.guest_orderer.name}"
+    value: ${checkout.guest_orderer.name}
   - action: fill
     target: orderer_phone_input
-    value: "${checkout.guest_orderer.phone}"
+    value: ${checkout.guest_orderer.phone}
   - action: fill
     target: orderer_email_input
-    value: "${checkout.guest_orderer.email}"
+    value: ${checkout.guest_orderer.email}
   - action: fill
     target: receiver_name_input
-    value: "${checkout.guest_receiver.name}"
+    value: ${checkout.guest_receiver.name}
   - action: fill
     target: receiver_phone_input
-    value: "${checkout.guest_receiver.phone}"
+    value: ${checkout.guest_receiver.phone}
   - action: assert_visible
     target: address_search_button

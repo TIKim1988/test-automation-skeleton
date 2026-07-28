@@ -1,6 +1,11 @@
 id: CART-005
 title: 장바구니 비우기 확인 팝업에서 취소하면 상품이 유지된다
-tags: [regression, cart]
+tags:
+  - regression
+  - cart
+priority: P2
+status: active
+enabled: true
 last_verified: "2026-07-10"
 steps:
   - action: navigate
