@@ -1,11 +1,12 @@
 id: SEARCH-002
-title: 검색 결과 화면에서 정렬 옵션을 변경할 수 있다
+title: 검색 상품의 표시 판매가가 낮은가격순과 높은가격순으로 정렬된다
 tags:
   - regression
   - search
 priority: P2
 status: active
 enabled: true
+precondition: 새 브라우저 컨텍스트의 비로그인 세션; 젤 검색 결과에 서로 다른 판매가가 2개 이상 있음
 last_verified: "2026-07-10"
 steps:
   - action: navigate
@@ -14,14 +15,18 @@ steps:
     target: header_search_button
   - action: fill
     target: search_input
-    value: ${search.keyword_with_results}
+    value: 젤
   - action: click
     target: search_submit_button
-  - action: click
-    target: sort_popularity
   - action: assert_visible
     target: search_page_heading
   - action: click
-    target: sort_price_asc
-  - action: assert_visible
-    target: search_page_heading
+    target: search_sort_price_asc
+  - action: custom
+    value: asc
+    name: assert_sorted_prices
+  - action: click
+    target: search_sort_price_desc
+  - action: custom
+    value: desc
+    name: assert_sorted_prices

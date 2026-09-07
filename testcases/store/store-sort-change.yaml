@@ -1,20 +1,27 @@
 id: STORE-002
-title: 카테고리 상품 목록의 정렬 옵션을 변경할 수 있다
+title: 카테고리 상품의 표시 판매가가 가격낮은순과 가격높은순으로 정렬된다
 tags:
   - regression
   - store
 priority: P2
 status: active
 enabled: true
+precondition: 새 브라우저 컨텍스트의 비로그인 세션; lifestyle에 서로 다른 판매가가 2개 이상 있음
 last_verified: "2026-07-10"
 steps:
   - action: navigate
     target: store_category_lifestyle_page
   - action: click
-    target: sort_price_asc
-  - action: assert_visible
-    target: sort_price_asc
+    target: store_sort_price_asc
+  - action: assert_url
+    value: orderby=price.*order=asc
+  - action: custom
+    value: asc
+    name: assert_sorted_prices
   - action: click
-    target: sort_rating
-  - action: assert_visible
-    target: sort_rating
+    target: store_sort_price_desc
+  - action: assert_url
+    value: orderby=price.*order=desc
+  - action: custom
+    value: desc
+    name: assert_sorted_prices

@@ -8,7 +8,12 @@
     "test:regression": "TEST_TAGS=regression playwright test",
     "testcases:export": "node scripts/sync-testcases.mjs export",
     "testcases:import": "node scripts/sync-testcases.mjs import",
-    "testcases:check": "node scripts/sync-testcases.mjs import --check"
+    "testcases:check": "node scripts/sync-testcases.mjs import --check",
+    "test:unit": "node --require ./scripts/register-typescript.cjs --test automation/unit/*.test.cjs automation/unit/*.test.mjs",
+    "typecheck": "tsc --noEmit",
+    "check": "node --check scripts/summarize-results.mjs && node --check scripts/sync-testcases.mjs && npm run typecheck && npm run testcases:check && npm run test:unit",
+    "test:quarantine": "TEST_QUARANTINE=1 playwright test",
+    "report:summary": "node scripts/summarize-results.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.47.0",

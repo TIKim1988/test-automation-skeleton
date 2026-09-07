@@ -22,9 +22,13 @@ export interface LoadTestCasesOptions {
 // testcases/ 아래 모든 yaml 파일을 재귀적으로 읽어서 TestCase 배열로 변환
 export function loadTestCases(dir: string, options: LoadTestCasesOptions = {}): TestCase[] {
   const excludeDirNames = new Set(options.excludeDirNames ?? []);
-  return walk(dir, excludeDirNames).map((file) => {
+  const seen = new Set<string>();
+  return walk(dir, excludeDirNames).sort().map((file) => {
     const raw = fs.readFileSync(file, 'utf8');
     const doc = yaml.load(raw) as Omit<TestCase, 'file'>;
+    if (!doc?.id || !Array.isArray(doc.steps)) throw new Error(`잘못된 테스트케이스: ${file}`);
+    if (seen.has(doc.id)) throw new Error(`중복 TC ID: ${doc.id}`);
+    seen.add(doc.id);
     return { ...doc, file };
   });
 }
@@ -37,7 +41,10 @@ export function loadFixtures(dir: string): Record<string, unknown> {
   for (const file of files) {
     const raw = fs.readFileSync(path.join(dir, file), 'utf8');
     const doc = (yaml.load(raw) ?? {}) as Record<string, unknown>;
-    Object.assign(merged, doc);
+    for (const [key, value] of Object.entries(doc)) {
+      if (Object.hasOwn(merged, key)) throw new Error(`중복 fixture 키: ${key} (${file})`);
+      merged[key] = value;
+    }
   }
   return merged;
 }
@@ -48,8 +55,12 @@ export function resolveTemplate(value: string, data: Record<string, unknown>): s
     const parts = refPath.trim().split('.');
     let current: unknown = data;
     for (const part of parts) {
-      current = (current as Record<string, unknown> | undefined)?.[part];
+      if (current === null || typeof current !== 'object' || !Object.hasOwn(current, part)) {
+        throw new Error(`존재하지 않는 fixture 변수: ${refPath}`);
+      }
+      current = (current as Record<string, unknown>)[part];
     }
-    return current === undefined ? '' : String(current);
+    if (current === null || current === undefined || typeof current === 'object') throw new Error(`문자열로 치환할 수 없는 fixture 변수: ${refPath}`);
+    return String(current);
   });
 }

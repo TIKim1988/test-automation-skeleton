@@ -1,3 +1,5 @@
+> 2026-09-08 재설계 구현과 검증 현황은 [test-health.md](test-health.md)를 참고해.
+
 # 히스토리
 | 날짜 | 내용 |
 |---|---|
@@ -39,7 +41,7 @@
 │   │   ├── loader.ts           testcases·selectors·fixtures 로딩 + ${} 템플릿 치환
 │   │   ├── selectors.ts        selectors/*.yaml 병합
 │   │   ├── interpreter.ts      step -> 실제 Playwright 명령 변환/실행
-│   │   └── known-issues.ts     아직 실제 DOM에 없는 testId를 참조하는 테스트를 실패 대신 skip 처리
+│   │   └── known-issues.ts     기존 skip 목록 제거, 상태는 CSV에서 관리
 │   ├── steps/custom.ts         YAML 기본 action으로 못 담는 로직 확장 지점
 │   └── tests/run-testcases.spec.ts   testcases/를 읽어 실행하는 진입점
 │
@@ -56,7 +58,7 @@
 | `testcases/**/*.yaml` | 자동 생성물 | CSV 원본에서 생성되는, 자동화가 실행하는 스펙 |
 | `selectors/*.yaml` | 테스트케이스 관리 | 화면 요소 이름 -> 실제 셀렉터(role/testId/css) 매핑 |
 | `fixtures/*.yaml` | 테스트케이스 관리 | 테스트에 쓰이는 실제 데이터 |
-| `automation/runner/*` | 자동화 | YAML을 읽어 Playwright 명령으로 변환하는 인터프리터, known-issues 처리 |
+| `automation/runner/*` | 자동화 | YAML을 읽어 Playwright 명령으로 변환하는 인터프리터, CSV 상태 처리 |
 | `automation/steps/custom.ts` | 자동화 | YAML 기본 동작으로 못 담는 복잡한 로직 확장 지점 |
 | `automation/tests/*.spec.ts` | 자동화 | 위 인터프리터를 실제로 구동하는 Playwright 테스트 진입점 |
 
@@ -85,24 +87,27 @@ npm run testcases:check
 
 세 경우 모두 "자동화 러너 코드(`interpreter.ts`)"는 건드릴 필요가 없습니다.
 
-## 아직 실제 DOM에 반영 안 된 요소 처리 (known-issues.ts)
+## 실행 상태와 실패 처리
 
-테스트케이스 관리 프로젝트가 `selectors/*.yaml`에 testId로 등록해뒀지만 실제 서비스에는
-아직 `data-testid`가 없는 요소가 있을 수 있습니다. 이런 요소를 참조하는 테스트는 타임아웃
-실패 대신 `automation/runner/known-issues.ts`에 사유와 함께 등록되어 skip 처리됩니다.
-프론트엔드에 testId가 실제로 추가되면 그 목록에서 지우면 다시 정상적으로 실행/검증됩니다.
+CSV의 `status`가 실행 상태의 기준이야. `manual`과 `enabled: false`는 제외하고,
+`quarantine`은 일반 실행에서 skip으로 보고해. `npm run test:quarantine`으로 격리된 TC만 재검증해.
+현재 23개는 모두 active이고 PRODUCT-001, PRODUCT-002의 하드코딩 skip은 제거했어.
+P1 skip, 전체 skip, 빈 실행, 재시도 통과, 실행 오류는 정상 성공으로 집계하지 않아.
 
 ## 테스트케이스 스텝 어휘 (action 종류)
 
 `navigate`, `click`, `fill`, `select`, `check`, `uncheck`,
-`assert_visible`, `assert_hidden`, `assert_text`, `wait`, `custom`
+`assert_visible`, `assert_hidden`, `assert_text`, `assert_value`, `assert_checked`,
+`assert_unchecked`, `assert_attribute`, `assert_url`, `assert_enabled`, `assert_disabled`, `wait`, `custom`
 
 ## 실행
 
 ```bash
 npm install
 npx playwright install --with-deps chromium   # 최초 1회
+npm run check                                 # 타입, CSV, 단위 테스트
 npx playwright test                            # lomastore.com 대상, 23개
+npm run report:summary                        # 실패 또는 flaky가 있으면 비정상 종료
 npm run test:smoke                             # 매일 실행하는 핵심 8개
 npm run test:regression                        # 회귀 테스트만 수동 실행
 ```
@@ -136,22 +141,22 @@ GitHub Actions는 매일 한국 시간 09:00에 smoke만 실행합니다. regres
 | ID | 제목 | 태그 |
 |---|---|---|
 | SEARCH-001 | 검색창에 키워드를 입력해 검색하면 검색 결과 화면이 노출된다 | smoke, search |
-| SEARCH-002 | 검색 결과 화면에서 정렬 옵션을 변경할 수 있다 | regression, search |
-| SEARCH-003 | 결과가 거의 없을 법한 키워드로 검색해도 검색 결과 화면이 정상적으로 노출된다 | regression, search |
+| SEARCH-002 | 검색 상품의 표시 판매가가 낮은가격순과 높은가격순으로 정렬된다 | regression, search |
+| SEARCH-003 | 검색 결과 0건이면 결과 없음 안내와 빈 상품 목록이 표시된다 | regression, search |
 
 ### store/
 
 | ID | 제목 | 태그 |
 |---|---|---|
 | STORE-001 | 스토어에서 카테고리를 선택하면 해당 카테고리 상품 목록이 노출된다 | smoke, store |
-| STORE-002 | 카테고리 상품 목록의 정렬 옵션을 변경할 수 있다 | regression, store |
+| STORE-002 | 카테고리 상품의 표시 판매가가 가격낮은순과 가격높은순으로 정렬된다 | regression, store |
 
 ### product/
 
 | ID | 제목 | 태그 | 비고 |
 |---|---|---|---|
-| PRODUCT-001 | 상품 상세 페이지에 상품명/수량조절/장바구니담기 버튼이 노출된다 | smoke, product | known-issues.ts로 skip 중 (상품명 testId 미부여) |
-| PRODUCT-002 | 상품 상세에서 수량 증가/감소 버튼을 누를 수 있다 | regression, product | known-issues.ts로 skip 중 (수량 표시 testId 미부여) |
+| PRODUCT-001 | 상품 상세 페이지에 상품명/수량조절/장바구니담기 버튼이 노출된다 | smoke, product | active, 실제 상품명 확인 |
+| PRODUCT-002 | 상품 상세 수량 1→2→1 변경에 따라 합계 금액이 일치한다 | regression, product | active, 수량과 금액 확인 |
 | PRODUCT-003 | 장바구니 담기 클릭 시 장바구니에 상품이 추가된다 | smoke, product, cart | |
 | PRODUCT-004 | 로그인이 필요한 상품에 비로그인 상태로 접근하면 로그인 안내 화면이 노출된다 | regression, product | |
 | PRODUCT-005 | 비로그인 상태에서 찜하기 버튼을 누르면 로그인 화면으로 이동한다 | regression, product | |
@@ -161,7 +166,7 @@ GitHub Actions는 매일 한국 시간 09:00에 smoke만 실행합니다. regres
 | ID | 제목 | 태그 |
 |---|---|---|
 | CART-001 | 장바구니에 담긴 상품과 주문 버튼이 노출된다 | smoke, cart |
-| CART-002 | 장바구니에서 수량 증가/감소 버튼을 누를 수 있다 | regression, cart |
+| CART-002 | 장바구니 수량 1→2→1 변경과 상품 금액, 새로고침 후 상태가 일치한다 | regression, cart |
 | CART-003 | 장바구니 상품 삭제 시 확인 팝업 후 삭제된다 | regression, cart |
 | CART-004 | 장바구니를 비우면 빈 장바구니 안내와 이동 버튼이 노출된다 | regression, cart |
 | CART-005 | 장바구니 비우기 확인 팝업에서 취소하면 상품이 유지된다 | regression, cart |
@@ -171,7 +176,7 @@ GitHub Actions는 매일 한국 시간 09:00에 smoke만 실행합니다. regres
 | ID | 제목 | 태그 |
 |---|---|---|
 | CHECKOUT-001 | 비로그인 상태에서도 장바구니의 주문하기를 통해 주문서 화면에 진입할 수 있다 | smoke, checkout |
-| CHECKOUT-002 | 주문서 화면에 주문자 정보와 배송지 정보 입력란이 노출되고 입력할 수 있다 | regression, checkout |
+| CHECKOUT-002 | 주문자와 수령자에 서로 다른 값을 입력하면 각각 유지된다 | regression, checkout |
 | CHECKOUT-003 | 주문서 화면에서 결제 수단을 선택할 수 있다 | regression, checkout |
 | CHECKOUT-004 | 주문서 화면에 이용약관/개인정보처리방침 안내가 노출된다 | regression, checkout |
 | CHECKOUT-005 | 주문서 작성 후 최종 결제 버튼이 노출된다 (실제 결제는 수행하지 않음) | smoke, checkout |

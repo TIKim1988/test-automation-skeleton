@@ -2,6 +2,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import yaml from 'js-yaml';
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
+require('./register-typescript.cjs');
+const { resolveTemplate, loadFixtures } = require('../automation/runner/loader.ts');
+const { loadSelectors: readSelectors } = require('../automation/runner/selectors.ts');
+const { customSteps } = require('../automation/steps/custom.ts');
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const TESTCASE_DIR = path.join(ROOT, 'testcases');
@@ -9,6 +15,7 @@ const MANAGEMENT_DIR = path.join(ROOT, 'testcase-management');
 const TEST_CASES_CSV = path.join(MANAGEMENT_DIR, 'test-cases.csv');
 const STEPS_CSV = path.join(MANAGEMENT_DIR, 'steps.csv');
 const ACTIONS = new Set([
+  'assert_value', 'assert_checked', 'assert_unchecked', 'assert_attribute', 'assert_url', 'assert_enabled', 'assert_disabled',
   'navigate', 'click', 'fill', 'select', 'check', 'uncheck',
   'assert_visible', 'assert_hidden', 'assert_text', 'wait', 'custom',
 ]);
@@ -102,8 +109,12 @@ function loadSelectors() {
   const elements = new Set();
   for (const file of walk(path.join(ROOT, 'selectors'))) {
     const doc = yaml.load(fs.readFileSync(file, 'utf8')) ?? {};
-    Object.keys(doc.pages ?? {}).forEach((key) => pages.add(key));
-    Object.keys(doc.elements ?? {}).forEach((key) => elements.add(key));
+    for (const [group, set] of [['pages', pages], ['elements', elements]]) {
+      for (const key of Object.keys(doc[group] ?? {})) {
+        if (set.has(key)) throw new Error(`중복 selector 키: ${group}.${key}`);
+        set.add(key);
+      }
+    }
   }
   return { pages, elements };
 }
@@ -111,13 +122,33 @@ function loadSelectors() {
 function validateRows(testCases, steps) {
   const errors = [];
   const byId = new Map();
+  const generatedPaths = new Set();
   const selectors = loadSelectors();
+  const fixtures = loadFixtures(path.join(ROOT, 'fixtures'));
+  const selectorMap = readSelectors(path.join(ROOT, 'selectors'));
+  const validateTemplates = (value) => {
+    if (typeof value === 'string') resolveTemplate(value, fixtures);
+    else if (value && typeof value === 'object') Object.values(value).forEach(validateTemplates);
+  };
+  validateTemplates(selectorMap);
+  for (const [key, def] of Object.entries(selectorMap.elements)) {
+    const chain = new Set([key]);
+    let scope = def.scope;
+    while (scope) {
+      if (chain.has(scope)) throw new Error(`selector scope 순환 참조: ${key}`);
+      if (!selectorMap.elements[scope]) throw new Error(`정의되지 않은 scope: ${scope}`);
+      chain.add(scope); scope = selectorMap.elements[scope].scope;
+    }
+  }
   for (const testCase of testCases) {
     try {
       const id = required(testCase, 'id', 'TestCases');
       if (byId.has(id)) throw new Error(`TestCases ${testCase.__row}행: id ${id}가 중복됩니다.`);
       required(testCase, 'title', 'TestCases');
-      validatePath(required(testCase, 'path', 'TestCases'), `TestCases ${testCase.__row}행`);
+      const outputPath = required(testCase, 'path', 'TestCases');
+      validatePath(outputPath, `TestCases ${testCase.__row}행`);
+      if (generatedPaths.has(outputPath.toLowerCase())) throw new Error(`중복 생성 경로: ${outputPath}`);
+      generatedPaths.add(outputPath.toLowerCase());
       const status = testCase.status.trim() || 'active';
       if (!['active', 'quarantine', 'manual'].includes(status)) throw new Error(`TestCases ${testCase.__row}행: status는 active, quarantine, manual 중 하나여야 합니다.`);
       const priority = testCase.priority.trim() || 'P2';
@@ -138,12 +169,20 @@ function validateRows(testCases, steps) {
       if (!Number.isInteger(stepNo) || stepNo < 1) throw new Error(`Steps ${step.__row}행: step_no는 1 이상의 정수여야 합니다.`);
       const action = required(step, 'action', 'Steps');
       if (!ACTIONS.has(action)) throw new Error(`Steps ${step.__row}행: 지원하지 않는 action ${action}입니다.`);
+      validateTemplates(step.value);
       const target = step.target.trim();
-      if (['wait', 'custom'].includes(action) === false && !target) throw new Error(`Steps ${step.__row}행: ${action} action에는 target이 필요합니다.`);
+      if (['wait', 'custom', 'assert_url'].includes(action) === false && !target) throw new Error(`Steps ${step.__row}행: ${action} action에는 target이 필요합니다.`);
       if (action === 'navigate' && target && !selectors.pages.has(target)) throw new Error(`Steps ${step.__row}행: page target ${target}이 selectors에 없습니다.`);
-      if (!['navigate', 'wait', 'custom'].includes(action) && target && !selectors.elements.has(target)) throw new Error(`Steps ${step.__row}행: element target ${target}이 selectors에 없습니다.`);
-      if (action === 'custom' && !step.name.trim()) throw new Error(`Steps ${step.__row}행: custom action에는 name이 필요합니다.`);
-      if (action === 'wait' && step.timeout_ms.trim() && !Number.isFinite(Number(step.timeout_ms))) throw new Error(`Steps ${step.__row}행: timeout_ms는 숫자여야 합니다.`);
+      if (!['navigate', 'wait', 'custom', 'assert_url'].includes(action) && target && !selectors.elements.has(target)) throw new Error(`Steps ${step.__row}행: element target ${target}이 selectors에 없습니다.`);
+      if (action === 'custom' && !Object.hasOwn(customSteps, step.name.trim())) throw new Error(`Steps ${step.__row}행: custom action에는 name이 필요합니다.`);
+      if (action === 'wait' && step.timeout_ms.trim() && (!Number.isFinite(Number(step.timeout_ms)) || Number(step.timeout_ms) < 0)) throw new Error(`Steps ${step.__row}행: timeout_ms는 숫자여야 합니다.`);
+      if (step.params.trim()) {
+        const params = JSON.parse(step.params);
+        validateTemplates(params);
+        if (!params || Array.isArray(params) || typeof params !== 'object') throw new Error('params는 JSON 객체여야 해.');
+      }
+      if (action === 'assert_attribute' && typeof JSON.parse(step.params || '{}').attribute !== 'string') throw new Error('assert_attribute에는 attribute가 필요해.');
+      if (action === 'assert_url' && !step.value.trim()) throw new Error('assert_url에는 URL 패턴이 필요해.');
       const group = grouped.get(testCaseId) ?? [];
       group.push({ ...step, stepNo });
       grouped.set(testCaseId, group);
@@ -223,13 +262,17 @@ function importCsv(checkOnly) {
   const testCases = parseCsv(fs.readFileSync(TEST_CASES_CSV, 'utf8'));
   const steps = parseCsv(fs.readFileSync(STEPS_CSV, 'utf8'));
   const { byId, grouped } = validateRows(testCases, steps);
-  const expectedPaths = new Set();
+  // 모든 문서 생성과 검증을 마친 뒤에만 저장해. 부분 생성물을 남기지 않아.
+  const documents = new Map([...byId].map(([id, tc]) => [id, documentFor(tc, grouped.get(id) ?? [])]));
+  const expectedPaths = new Set([...byId.values()].map((tc) => path.normalize(path.join(TESTCASE_DIR, tc.path.trim()))));
+  const staleBeforeWrite = walk(TESTCASE_DIR).filter((file) => !expectedPaths.has(path.normalize(file)));
+  if (staleBeforeWrite.length) throw new Error(`CSV에 없는 YAML: ${staleBeforeWrite.join(', ')}`);
   const changed = [];
   for (const [id, testCase] of byId) {
     const relativePath = testCase.path.trim();
     const outputPath = path.join(TESTCASE_DIR, relativePath);
     expectedPaths.add(path.normalize(outputPath));
-    const content = documentFor(testCase, grouped.get(id) ?? []);
+    const content = documents.get(id);
     const current = fs.existsSync(outputPath) ? fs.readFileSync(outputPath, 'utf8') : undefined;
     if (current !== content) {
       changed.push(path.relative(ROOT, outputPath));

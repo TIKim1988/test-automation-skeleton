@@ -1,20 +1,38 @@
 id: PRODUCT-002
-title: 상품 상세에서 수량 증가/감소 버튼을 누를 수 있다
+title: 상품 상세 수량 1→2→1 변경에 따라 합계 금액이 일치한다
 tags:
   - regression
   - product
 priority: P2
 status: active
 enabled: true
-last_verified: "2026-07-10"
+precondition: 새 브라우저 컨텍스트의 비로그인 세션; fixture 상품 경로와 접근 정책 유효
+last_verified: "2026-09-08"
 steps:
   - action: navigate
     target: product_guest_accessible_page
-  - action: click
-    target: quantity_increase_button
-  - action: assert_visible
+  - action: assert_text
     target: total_quantity_label
+    value: 총 1개
+  - action: custom
+    name: capture_product_price
+  - action: assert_disabled
+    target: product_quantity_decrease_button
   - action: click
-    target: quantity_decrease_button
-  - action: assert_visible
-    target: add_to_cart_button
+    target: product_quantity_increase_button
+  - action: assert_text
+    target: total_quantity_label
+    value: 총 2개
+  - action: custom
+    value: "2"
+    name: assert_product_price
+  - action: click
+    target: product_quantity_decrease_button
+  - action: assert_text
+    target: total_quantity_label
+    value: 총 1개
+  - action: custom
+    value: "1"
+    name: assert_product_price
+  - action: assert_disabled
+    target: product_quantity_decrease_button

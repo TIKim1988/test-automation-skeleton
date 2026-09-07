@@ -1,24 +1,28 @@
 id: CART-002
-title: 장바구니에서 수량 증가/감소 버튼을 누를 수 있다
+title: 장바구니 수량 1→2→1 변경과 상품 금액, 새로고침 후 상태가 일치한다
 tags:
   - regression
   - cart
 priority: P2
 status: active
 enabled: true
-last_verified: "2026-07-10"
+precondition: 새 브라우저 컨텍스트의 비로그인 세션; 대표 상품 재고 있음; 테스트가 상품 1개를 독립적으로 담고 완료 확인
+last_verified: "2026-09-08"
 steps:
-  - action: navigate
-    target: product_guest_accessible_page
+  - action: custom
+    name: prepare_cart
   - action: click
-    target: add_to_cart_button
+    target: cart_quantity_increase_button
+  - action: custom
+    value: "2"
+    name: assert_cart
+  - action: click
+    target: cart_quantity_decrease_button
+  - action: custom
+    value: "1"
+    name: assert_cart
   - action: navigate
     target: cart_page
-  - action: click
-    target: quantity_increase_button
-  - action: assert_visible
-    target: order_button
-  - action: click
-    target: quantity_decrease_button
-  - action: assert_visible
-    target: order_button
+  - action: custom
+    value: "1"
+    name: assert_cart

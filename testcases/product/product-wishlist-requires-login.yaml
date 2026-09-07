@@ -6,11 +6,14 @@ tags:
 priority: P2
 status: active
 enabled: true
-last_verified: "2026-07-10"
+precondition: 새 브라우저 컨텍스트의 비로그인 세션; fixture 상품 경로와 접근 정책 유효
+last_verified: "2026-09-08"
 steps:
   - action: navigate
     target: store_category_lifestyle_page
   - action: click
-    target: wishlist_button
+    target: store_wishlist_button
   - action: assert_visible
     target: login_submit_button
+  - action: assert_url
+    value: /signin(?:\?|$)

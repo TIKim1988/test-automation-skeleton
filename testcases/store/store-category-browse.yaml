@@ -6,13 +6,14 @@ tags:
 priority: P1
 status: active
 enabled: true
-last_verified: "2026-07-10"
+precondition: 새 브라우저 컨텍스트의 비로그인 세션
+last_verified: "2026-09-08"
 steps:
   - action: navigate
     target: store_page
   - action: click
     target: category_lifestyle
-  - action: assert_visible
-    target: category_lifestyle
-  - action: assert_visible
-    target: wishlist_button
+  - action: assert_url
+    value: /store/lifestyle(?:\?|$)
+  - action: custom
+    name: assert_product_list

@@ -6,7 +6,8 @@ tags:
 priority: P1
 status: active
 enabled: true
-last_verified: "2026-07-10"
+precondition: 새 브라우저 컨텍스트의 비로그인 세션
+last_verified: "2026-09-08"
 steps:
   - action: navigate
     target: home_page
@@ -19,3 +20,5 @@ steps:
     target: search_submit_button
   - action: assert_visible
     target: search_page_heading
+  - action: custom
+    name: assert_search_results

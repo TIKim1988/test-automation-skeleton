@@ -11,3 +11,5 @@ elements:
   login_submit_button:
     role: button
     name: 로그인
+    exact: true
+    scope: main_scope

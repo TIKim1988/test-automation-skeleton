@@ -8,6 +8,13 @@ export type StepAction =
   | 'assert_visible'
   | 'assert_hidden'
   | 'assert_text'
+  | 'assert_value'
+  | 'assert_checked'
+  | 'assert_unchecked'
+  | 'assert_attribute'
+  | 'assert_url'
+  | 'assert_enabled'
+  | 'assert_disabled'
   | 'wait'
   | 'custom';
 
@@ -40,6 +47,8 @@ export interface ElementDef {
   exact?: boolean;
   testId?: string;
   css?: string;
+  scope?: string; // 다른 element 이름으로 범위를 제한
+  textRegex?: string;
   text?: string;
 }
 

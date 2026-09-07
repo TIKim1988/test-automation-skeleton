@@ -1,38 +1,41 @@
-# lomastore.com 홈 화면 요소 매핑
-# 2026-07-10 실제 화면 확인 후 작성 (Claude in Chrome)
-
 pages:
   home_page: /
-
 elements:
   nav_store:
     role: link
     name: 스토어
     exact: true
+    scope: header_nav
   nav_curation:
     role: link
     name: 큐레이션
     exact: true
+    scope: header_nav
   nav_event:
     role: link
     name: 이벤트
     exact: true
+    scope: header_nav
   nav_blog:
     role: link
     name: 블로그
     exact: true
+    scope: header_nav
   header_login_link:
     role: link
     name: 로그인
+    scope: header_scope
   header_cart_link:
     role: link
     name: 장바구니
+    scope: header_scope
   header_search_button:
     role: button
     name: 검색
+    scope: header_scope
   popular_tab_condom_gel:
     role: tab
-    name: "콘돔·젤"
+    name: 콘돔·젤
   popular_tab_healthcare:
     role: tab
     name: 헬스케어
@@ -45,3 +48,22 @@ elements:
   popular_tab_pleasure_toy:
     role: tab
     name: 플레저 토이
+  main_scope:
+    role: main
+  header_scope:
+    role: banner
+  header_nav:
+    role: navigation
+    name: 주요 메뉴
+    exact: true
+    scope: header_scope
+  healthcare_panel:
+    role: tabpanel
+    name: 헬스케어
+    exact: true
+    scope: main_scope
+  pleasure_panel:
+    role: tabpanel
+    name: 플레저 토이
+    exact: true
+    scope: main_scope

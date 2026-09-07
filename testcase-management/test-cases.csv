@@ -1,24 +1,24 @@
 id,title,path,tags,priority,status,enabled,precondition,last_verified
-CART-005,장바구니 비우기 확인 팝업에서 취소하면 상품이 유지된다,cart/cart-clear-cancel-keeps-items.yaml,"regression,cart",P2,active,true,,2026-07-10
-CART-004,장바구니를 비우면 빈 장바구니 안내와 이동 버튼이 노출된다,cart/cart-empty-state.yaml,"regression,cart",P2,active,true,,2026-07-10
-CART-002,장바구니에서 수량 증가/감소 버튼을 누를 수 있다,cart/cart-quantity-update.yaml,"regression,cart",P2,active,true,,2026-07-10
-CART-003,장바구니 상품 삭제 시 확인 팝업 후 삭제된다,cart/cart-remove-item.yaml,"regression,cart",P2,active,true,,2026-07-10
-CART-001,장바구니에 담긴 상품과 주문 버튼이 노출된다,cart/cart-view-and-total.yaml,"smoke,cart",P1,active,true,,2026-07-10
-CHECKOUT-005,주문서 작성 후 최종 결제 버튼이 노출된다 (실제 결제는 수행하지 않음),checkout/checkout-final-pay-button-visible.yaml,"smoke,checkout",P1,active,true,,2026-07-10
-CHECKOUT-002,주문서 화면에 주문자 정보와 배송지 정보 입력란이 노출되고 입력할 수 있다,checkout/checkout-form-fields.yaml,"regression,checkout",P2,active,true,,2026-07-10
-CHECKOUT-001,비로그인 상태에서도 장바구니의 주문하기를 통해 주문서 화면에 진입할 수 있다,checkout/checkout-guest-entry.yaml,"smoke,checkout",P1,active,true,,2026-07-10
-CHECKOUT-003,주문서 화면에서 결제 수단을 선택할 수 있다,checkout/checkout-payment-methods.yaml,"regression,checkout",P2,active,true,,2026-07-10
-CHECKOUT-004,주문서 화면에 이용약관/개인정보처리방침 안내가 노출된다,checkout/checkout-terms-links-visible.yaml,"regression,checkout",P2,active,true,,2026-07-10
-HOME-001,홈페이지 접속 시 헤더 내비게이션과 인기상품 영역이 노출된다,home/home-nav-and-popular-section.yaml,"smoke,home",P1,active,true,,2026-07-10
-HOME-002,인기상품 영역의 카테고리 탭을 클릭해도 에러 없이 전환된다,home/home-popular-tab-switch.yaml,"regression,home",P2,active,true,,2026-07-10
-ORDER-001,비회원 주문조회 화면에 주문번호/이메일 입력란과 조회 버튼이 노출된다,order-tracking/order-tracking-form-visible.yaml,"regression,order-tracking",P2,active,true,,2026-07-10
-PRODUCT-003,장바구니 담기 클릭 시 장바구니에 상품이 추가된다,product/product-add-to-cart.yaml,"smoke,product,cart",P1,active,true,,2026-07-10
-PRODUCT-001,상품 상세 페이지에 상품명/수량조절/장바구니담기 버튼이 노출된다,product/product-detail-view.yaml,"smoke,product",P1,active,true,,2026-07-10
-PRODUCT-004,로그인이 필요한 상품에 비로그인 상태로 접근하면 로그인 안내 화면이 노출된다,product/product-login-required-gate.yaml,"regression,product",P2,active,true,,2026-07-10
-PRODUCT-002,상품 상세에서 수량 증가/감소 버튼을 누를 수 있다,product/product-quantity-change.yaml,"regression,product",P2,active,true,,2026-07-10
-PRODUCT-005,비로그인 상태에서 찜하기 버튼을 누르면 로그인 화면으로 이동한다,product/product-wishlist-requires-login.yaml,"regression,product",P2,active,true,,2026-07-10
-SEARCH-003,결과가 거의 없을 법한 키워드로 검색해도 검색 결과 화면이 정상적으로 노출된다,search/search-no-match-keyword.yaml,"regression,search",P2,active,true,,2026-07-10
-SEARCH-002,검색 결과 화면에서 정렬 옵션을 변경할 수 있다,search/search-sort-change.yaml,"regression,search",P2,active,true,,2026-07-10
-SEARCH-001,검색창에 키워드를 입력해 검색하면 검색 결과 화면이 노출된다,search/search-with-results.yaml,"smoke,search",P1,active,true,,2026-07-10
-STORE-001,스토어에서 카테고리를 선택하면 해당 카테고리 상품 목록이 노출된다,store/store-category-browse.yaml,"smoke,store",P1,active,true,,2026-07-10
-STORE-002,카테고리 상품 목록의 정렬 옵션을 변경할 수 있다,store/store-sort-change.yaml,"regression,store",P2,active,true,,2026-07-10
+CART-005,장바구니 비우기 확인 팝업에서 취소하면 상품이 유지된다,cart/cart-clear-cancel-keeps-items.yaml,"regression,cart",P2,active,true,새 브라우저 컨텍스트의 비로그인 세션; 대표 상품 재고 있음; 테스트가 상품 1개를 독립적으로 담고 완료 확인,2026-09-08
+CART-004,장바구니를 비우면 빈 장바구니 안내와 이동 버튼이 노출된다,cart/cart-empty-state.yaml,"regression,cart",P2,active,true,새 브라우저 컨텍스트의 비로그인 세션; 대표 상품 재고 있음; 테스트가 상품 1개를 독립적으로 담고 완료 확인,2026-09-08
+CART-002,"장바구니 수량 1→2→1 변경과 상품 금액, 새로고침 후 상태가 일치한다",cart/cart-quantity-update.yaml,"regression,cart",P2,active,true,새 브라우저 컨텍스트의 비로그인 세션; 대표 상품 재고 있음; 테스트가 상품 1개를 독립적으로 담고 완료 확인,2026-09-08
+CART-003,장바구니 상품 삭제 시 확인 팝업 후 삭제된다,cart/cart-remove-item.yaml,"regression,cart",P2,active,true,새 브라우저 컨텍스트의 비로그인 세션; 대표 상품 재고 있음; 테스트가 상품 1개를 독립적으로 담고 완료 확인,2026-09-08
+CART-001,장바구니에 담긴 상품과 주문 버튼이 노출된다,cart/cart-view-and-total.yaml,"smoke,cart",P1,active,true,새 브라우저 컨텍스트의 비로그인 세션; 대표 상품 재고 있음; 테스트가 상품 1개를 독립적으로 담고 완료 확인,2026-09-08
+CHECKOUT-005,주문서 작성 후 최종 결제 버튼이 노출된다 (실제 결제는 수행하지 않음),checkout/checkout-final-pay-button-visible.yaml,"smoke,checkout",P1,active,true,새 브라우저 컨텍스트의 비로그인 세션; 대표 상품 재고 있음; 테스트가 상품 1개를 독립적으로 담고 완료 확인,2026-09-08
+CHECKOUT-002,주문자와 수령자에 서로 다른 값을 입력하면 각각 유지된다,checkout/checkout-form-fields.yaml,"regression,checkout",P2,active,true,새 브라우저 컨텍스트의 비로그인 세션; 대표 상품 재고 있음; 테스트가 상품 1개를 독립적으로 담고 완료 확인,2026-09-08
+CHECKOUT-001,비로그인 상태에서도 장바구니의 주문하기를 통해 주문서 화면에 진입할 수 있다,checkout/checkout-guest-entry.yaml,"smoke,checkout",P1,active,true,새 브라우저 컨텍스트의 비로그인 세션; 대표 상품 재고 있음; 테스트가 상품 1개를 독립적으로 담고 완료 확인,2026-09-08
+CHECKOUT-003,주문서 화면에서 결제 수단을 선택할 수 있다,checkout/checkout-payment-methods.yaml,"regression,checkout",P2,active,true,새 브라우저 컨텍스트의 비로그인 세션; 대표 상품 재고 있음; 테스트가 상품 1개를 독립적으로 담고 완료 확인,2026-09-08
+CHECKOUT-004,주문서 화면에 이용약관/개인정보처리방침 안내가 노출된다,checkout/checkout-terms-links-visible.yaml,"regression,checkout",P2,active,true,새 브라우저 컨텍스트의 비로그인 세션; 대표 상품 재고 있음; 테스트가 상품 1개를 독립적으로 담고 완료 확인,2026-09-08
+HOME-001,홈페이지 접속 시 헤더 내비게이션과 인기상품 영역이 노출된다,home/home-nav-and-popular-section.yaml,"smoke,home",P1,active,true,새 브라우저 컨텍스트의 비로그인 세션,2026-09-08
+HOME-002,인기상품 영역의 카테고리 탭을 클릭해도 에러 없이 전환된다,home/home-popular-tab-switch.yaml,"regression,home",P2,active,true,새 브라우저 컨텍스트의 비로그인 세션,2026-09-08
+ORDER-001,비회원 주문조회 화면에 주문번호/이메일 입력란과 조회 버튼이 노출된다,order-tracking/order-tracking-form-visible.yaml,"regression,order-tracking",P2,active,true,새 브라우저 컨텍스트의 비로그인 세션,2026-09-08
+PRODUCT-003,장바구니 담기 클릭 시 장바구니에 상품이 추가된다,product/product-add-to-cart.yaml,"smoke,product,cart",P1,active,true,새 브라우저 컨텍스트의 비로그인 세션; 대표 상품 재고 있음; 테스트가 상품 1개를 독립적으로 담고 완료 확인,2026-09-08
+PRODUCT-001,상품 상세 페이지에 상품명/수량조절/장바구니담기 버튼이 노출된다,product/product-detail-view.yaml,"smoke,product",P1,active,true,새 브라우저 컨텍스트의 비로그인 세션; fixture 상품 경로와 접근 정책 유효,2026-09-08
+PRODUCT-004,로그인이 필요한 상품에 비로그인 상태로 접근하면 로그인 안내 화면이 노출된다,product/product-login-required-gate.yaml,"regression,product",P2,active,true,새 브라우저 컨텍스트의 비로그인 세션; fixture 상품 경로와 접근 정책 유효,2026-09-08
+PRODUCT-002,상품 상세 수량 1→2→1 변경에 따라 합계 금액이 일치한다,product/product-quantity-change.yaml,"regression,product",P2,active,true,새 브라우저 컨텍스트의 비로그인 세션; fixture 상품 경로와 접근 정책 유효,2026-09-08
+PRODUCT-005,비로그인 상태에서 찜하기 버튼을 누르면 로그인 화면으로 이동한다,product/product-wishlist-requires-login.yaml,"regression,product",P2,active,true,새 브라우저 컨텍스트의 비로그인 세션; fixture 상품 경로와 접근 정책 유효,2026-09-08
+SEARCH-003,검색 결과 0건이면 결과 없음 안내와 빈 상품 목록이 표시된다,search/search-no-match-keyword.yaml,"regression,search",P2,active,true,새 브라우저 컨텍스트의 비로그인 세션; fixture 검색어 결과 0건,2026-09-08
+SEARCH-002,검색 상품의 표시 판매가가 낮은가격순과 높은가격순으로 정렬된다,search/search-sort-change.yaml,"regression,search",P2,active,true,새 브라우저 컨텍스트의 비로그인 세션; 젤 검색 결과에 서로 다른 판매가가 2개 이상 있음,2026-07-10
+SEARCH-001,검색창에 키워드를 입력해 검색하면 검색 결과 화면이 노출된다,search/search-with-results.yaml,"smoke,search",P1,active,true,새 브라우저 컨텍스트의 비로그인 세션,2026-09-08
+STORE-001,스토어에서 카테고리를 선택하면 해당 카테고리 상품 목록이 노출된다,store/store-category-browse.yaml,"smoke,store",P1,active,true,새 브라우저 컨텍스트의 비로그인 세션,2026-09-08
+STORE-002,카테고리 상품의 표시 판매가가 가격낮은순과 가격높은순으로 정렬된다,store/store-sort-change.yaml,"regression,store",P2,active,true,새 브라우저 컨텍스트의 비로그인 세션; lifestyle에 서로 다른 판매가가 2개 이상 있음,2026-07-10

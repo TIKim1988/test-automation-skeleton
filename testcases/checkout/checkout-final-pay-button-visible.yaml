@@ -6,16 +6,15 @@ tags:
 priority: P1
 status: active
 enabled: true
-last_verified: "2026-07-10"
+precondition: 새 브라우저 컨텍스트의 비로그인 세션; 대표 상품 재고 있음; 테스트가 상품 1개를 독립적으로 담고 완료 확인
+last_verified: "2026-09-08"
 steps:
-  - action: navigate
-    target: product_guest_accessible_page
-  - action: click
-    target: add_to_cart_button
-  - action: navigate
-    target: cart_page
+  - action: custom
+    name: prepare_cart
   - action: click
     target: order_button
+  - action: custom
+    name: assert_checkout
   - action: fill
     target: orderer_name_input
     value: ${checkout.guest_orderer.name}

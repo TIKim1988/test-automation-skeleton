@@ -6,23 +6,26 @@ tags:
 priority: P2
 status: active
 enabled: true
-last_verified: "2026-07-10"
+precondition: 새 브라우저 컨텍스트의 비로그인 세션; 대표 상품 재고 있음; 테스트가 상품 1개를 독립적으로 담고 완료 확인
+last_verified: "2026-09-08"
 steps:
-  - action: navigate
-    target: product_guest_accessible_page
-  - action: click
-    target: add_to_cart_button
-  - action: navigate
-    target: cart_page
+  - action: custom
+    name: prepare_cart
   - action: click
     target: order_button
-  - action: assert_visible
+  - action: custom
+    name: assert_checkout
+  - action: assert_checked
     target: payment_method_card_radio
   - action: click
+    target: payment_method_transfer_label
+  - action: assert_checked
     target: payment_method_transfer_radio
-  - action: assert_visible
-    target: payment_method_transfer_radio
+  - action: assert_unchecked
+    target: payment_method_card_radio
   - action: click
+    target: payment_method_bacs_label
+  - action: assert_checked
     target: payment_method_bacs_radio
-  - action: assert_visible
-    target: payment_method_bacs_radio
+  - action: assert_unchecked
+    target: payment_method_transfer_radio

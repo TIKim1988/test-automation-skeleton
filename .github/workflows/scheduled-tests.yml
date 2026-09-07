@@ -1,6 +1,8 @@
 name: Scheduled Playwright Tests
 
 on:
+  push:
+    branches: [main, codex/automation-operability]
   schedule:
     # 매일 한국 시간 09:00 (UTC 00:00)에 핵심 smoke 테스트만 실행합니다.
     - cron: '0 0 * * *'
@@ -36,14 +38,14 @@ jobs:
         run: npm ci
 
       - name: Validate spreadsheet source and generated YAML
-        run: npm run testcases:check
+        run: npm run check
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
       - name: Select test suite
         run: |
-          suite="${{ github.event_name == 'schedule' && 'smoke' || inputs.suite }}"
+          suite="${{ github.event_name != 'workflow_dispatch' && 'smoke' || inputs.suite }}"
           if [ "$suite" = "all" ]; then
             echo "TEST_TAGS=" >> "$GITHUB_ENV"
           else
@@ -59,7 +61,8 @@ jobs:
       - name: Summarize results
         id: summary
         if: always()
-        run: node scripts/summarize-results.mjs
+        run: npm run report:summary
+        continue-on-error: true
 
       - name: Zip HTML report
         if: always()
@@ -74,7 +77,7 @@ jobs:
           retention-days: 14
 
       - name: Email report
-        if: always()
+        if: always() && github.event_name != 'push'
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
@@ -84,13 +87,13 @@ jobs:
           password: ${{ secrets.GMAIL_APP_PASSWORD }}
           from: Playwright Automation <${{ secrets.GMAIL_USERNAME }}>
           to: k39008116@gmail.com
-          subject: "${{ steps.summary.outputs.icon }} lomastore 자동화 결과 - 통과 ${{ steps.summary.outputs.passed }} / 실패 ${{ steps.summary.outputs.failed }} / 스킵 ${{ steps.summary.outputs.skipped }}"
+          subject: "${{ steps.summary.outputs.icon }} lomastore 자동화 결과 - 통과 ${{ steps.summary.outputs.passed }} / 실패 ${{ steps.summary.outputs.failed }} / 재시도 통과 ${{ steps.summary.outputs.flaky }} / 스킵 ${{ steps.summary.outputs.skipped }} / 실행 오류 ${{ steps.summary.outputs.errors }}"
           html_body: |
             <p>실행 결과는 첨부된 <code>playwright-report.zip</code>의 <code>index.html</code>에서 확인하세요.</p>
-            <p>통과: ${{ steps.summary.outputs.passed }} / 실패: ${{ steps.summary.outputs.failed }} / 스킵: ${{ steps.summary.outputs.skipped }}</p>
+            <p>통과: ${{ steps.summary.outputs.passed }} / 실패: ${{ steps.summary.outputs.failed }} / 재시도 통과: ${{ steps.summary.outputs.flaky }} / 스킵: ${{ steps.summary.outputs.skipped }} / 실행 오류: ${{ steps.summary.outputs.errors }}</p>
             <p>실패 목록과 오류 첫 줄은 <code>email-summary.html</code> 첨부파일에서 확인하세요.</p>
           attachments: playwright-report.zip,test-results/email-summary.html
 
-      - name: Fail job if tests failed
-        if: steps.summary.outputs.failed != '0'
+      - name: Fail job if tests or result processing failed
+        if: always() && (steps.tests.outcome != 'success' || steps.summary.outcome != 'success' || steps.summary.outputs.ok != 'true')
         run: exit 1

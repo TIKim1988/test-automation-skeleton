@@ -6,7 +6,8 @@ tags:
 priority: P1
 status: active
 enabled: true
-last_verified: "2026-07-10"
+precondition: 새 브라우저 컨텍스트의 비로그인 세션; fixture 상품 경로와 접근 정책 유효
+last_verified: "2026-09-08"
 steps:
   - action: navigate
     target: product_guest_accessible_page
@@ -14,8 +15,8 @@ steps:
     target: product_title
     value: ${product.guest_accessible_name}
   - action: assert_visible
-    target: quantity_decrease_button
+    target: product_quantity_decrease_button
   - action: assert_visible
-    target: quantity_increase_button
+    target: product_quantity_increase_button
   - action: assert_visible
     target: add_to_cart_button

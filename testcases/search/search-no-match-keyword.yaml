@@ -1,12 +1,13 @@
 id: SEARCH-003
-title: 결과가 거의 없을 법한 키워드로 검색해도 검색 결과 화면이 정상적으로 노출된다
+title: 검색 결과 0건이면 결과 없음 안내와 빈 상품 목록이 표시된다
 tags:
   - regression
   - search
 priority: P2
 status: active
 enabled: true
-last_verified: "2026-07-10"
+precondition: 새 브라우저 컨텍스트의 비로그인 세션; fixture 검색어 결과 0건
+last_verified: "2026-09-08"
 steps:
   - action: navigate
     target: home_page
@@ -19,3 +20,5 @@ steps:
     target: search_submit_button
   - action: assert_visible
     target: search_page_heading
+  - action: custom
+    name: assert_empty_search

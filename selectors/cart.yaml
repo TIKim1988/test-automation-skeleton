@@ -1,9 +1,5 @@
-# lomastore.com 장바구니 화면 요소 매핑
-# 2026-07-10 실제 화면 확인 (비로그인 게스트 장바구니로 접근 가능함을 확인).
-
 pages:
   cart_page: /cart
-
 elements:
   remove_item_x_button:
     role: button
@@ -11,39 +7,44 @@ elements:
   delete_item_button:
     role: button
     name: 항목 삭제
-  quantity_decrease_button:
-    role: button
-    name: 수량 감소
-  quantity_increase_button:
-    role: button
-    name: 수량 증가
   clear_cart_button:
     role: button
     name: 장바구니 비우기
   clear_cart_confirm_button:
     role: button
     name: 비우기
+    exact: true
   clear_cart_cancel_button:
     role: button
     name: 취소
   remove_item_confirm_button:
     role: button
     name: 빼기
-  # 실제 접근성 이름은 "N개 상품 주문하기" (N은 담긴 수량에 따라 동적) - 자동화 쪽에서 부분/정규식 일치 필요
   order_button:
     role: button
-    nameRegex: "상품 주문하기$"
-  wishlist_button:
-    role: button
-    name: 찜하기
+    nameRegex: 상품 주문하기$
   empty_cart_shopping_link:
     role: link
     name: 쇼핑하기
+    scope: main_scope
   empty_cart_home_link:
     role: link
     name: 홈으로
-  # 아래 요소는 접근성 role이 "generic"(일반 텍스트)이라 role/name만으로는 안정적으로 특정하기 어려움.
-  # 자동화 프로젝트 쪽에 testId 부여를 요청해야 함.
+    scope: main_scope
   empty_cart_message:
-    role: generic
-    name: 장바구니가 비어 있습니다.
+    text: 장바구니가 비어 있습니다.
+    exact: false
+    scope: main_scope
+  cart_item:
+    css: div:has(> button[aria-label="상품 제거"])
+    scope: main_scope
+  cart_quantity_increase_button:
+    role: button
+    name: 수량 증가
+    scope: cart_item
+    exact: true
+  cart_quantity_decrease_button:
+    role: button
+    name: 수량 감소
+    scope: cart_item
+    exact: true
