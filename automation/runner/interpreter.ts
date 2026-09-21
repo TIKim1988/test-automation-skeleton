@@ -1,6 +1,8 @@
 import { expect, test, type Page, type Locator } from '@playwright/test';
 import type { ElementDef, SelectorMap, Step, TestCase } from './types';
 import { resolveTemplate } from './loader';
+import { buildPrimaryLocator, resolveLocator as observeLocator } from './healing/resolver';
+import type { HealContext } from './healing/types';
 
 export type CustomStepFn = (page: Page, step: Step, ctx: Record<string, unknown>) => Promise<void>;
 
@@ -10,24 +12,26 @@ export function resolveLocator(page: Page, selectors: SelectorMap, target: strin
   if (chain.includes(target)) throw new Error(`selector scope 순환 참조: ${[...chain, target].join(' -> ')}`);
   const root: Page | Locator = def.scope ? resolveLocator(page, selectors, def.scope, data, [...chain, target]) : page;
   const render = (value: string) => resolveTemplate(value, data);
-  if (def.testId) return root.getByTestId(render(def.testId));
-  if (def.role) return root.getByRole(def.role as Parameters<Page['getByRole']>[0], {
-    name: def.nameRegex ? new RegExp(render(def.nameRegex)) : def.name ? render(def.name) : undefined,
-    exact: def.exact,
-  });
-  if (def.text || def.textRegex) return root.getByText(def.textRegex ? new RegExp(render(def.textRegex)) : render(def.text!), { exact: def.exact });
-  if (def.css) return root.locator(render(def.css));
-  throw new Error(`셀렉터 정의가 비어 있어: ${target}`);
+  const rendered = {...def};
+  for (const key of ['testId','name','nameRegex','text','textRegex','css'] as const) {
+    if (def[key] !== undefined) rendered[key] = render(def[key]!);
+  }
+  return buildPrimaryLocator(root, rendered);
 }
 
 export async function runTestCase(page: Page, testCase: TestCase, selectors: SelectorMap,
-  data: Record<string, unknown>, customSteps: Record<string, CustomStepFn> = {}): Promise<void> {
+  data: Record<string, unknown>, customSteps: Record<string, CustomStepFn> = {}, heal?: HealContext): Promise<void> {
   // fixture 원본은 읽기 전용, 계산한 기준 금액과 수량은 현재 테스트 안에서만 사용해.
   const context = structuredClone(data);
   for (const [index, step] of testCase.steps.entries()) {
     await test.step(`${testCase.id} ${index + 1}: ${step.action} ${step.target ?? step.name ?? ''}`, async () => {
       const value = step.value !== undefined ? resolveTemplate(step.value, context) : undefined;
       const locator = () => resolveLocator(page, selectors, step.target ?? '', context);
+      if (heal && step.target && selectors.elements[step.target]) {
+        heal.action = step.action;
+        heal.stepIndex = index;
+        await observeLocator(page, step.target, selectors.elements[step.target], heal, locator());
+      }
       switch (step.action) {
         case 'navigate': {
           const url = step.target ? selectors.pages[step.target] : undefined;
@@ -54,7 +58,7 @@ export async function runTestCase(page: Page, testCase: TestCase, selectors: Sel
           if (typeof step.params?.attribute !== 'string') throw new Error('assert_attribute에는 attribute가 필요해.');
           await expect(locator()).toHaveAttribute(step.params.attribute, value ?? ''); break;
         case 'assert_url':
-          await expect(page).toHaveURL(new RegExp(value ?? '')); break;
+          await expect(page).toHaveURL(new RegExp(value ?? ''), {timeout:step.timeoutMs}); break;
         case 'wait': await page.waitForTimeout(step.timeoutMs ?? 1000); break;
         case 'custom': {
           const fn = step.name ? customSteps[step.name] : undefined;

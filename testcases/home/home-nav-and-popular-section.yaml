@@ -7,7 +7,7 @@ priority: P1
 status: active
 enabled: true
 precondition: 새 브라우저 컨텍스트의 비로그인 세션
-last_verified: "2026-09-08"
+last_verified: "2026-09-21"
 steps:
   - action: navigate
     target: home_page

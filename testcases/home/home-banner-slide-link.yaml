@@ -1,0 +1,17 @@
+id: HOME-004
+title: 배너 슬라이드 클릭 후 사이트 헤더 내비게이션이 유지된다
+tags:
+  - regression
+  - home
+priority: P2
+status: active
+enabled: true
+precondition: 새 비회원 세션, 홈 배너와 헬스케어 인기상품 목록 노출
+last_verified: "2026-09-21"
+steps:
+  - action: navigate
+    target: home_page
+  - action: custom
+    name: open_home_banner
+  - action: assert_visible
+    target: nav_store

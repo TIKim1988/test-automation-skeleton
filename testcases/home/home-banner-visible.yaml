@@ -1,0 +1,15 @@
+id: HOME-003
+title: 배너 슬라이드 클릭 시 해당 이벤트, 상품 페이지로 이동한다
+tags:
+  - smoke
+  - home
+priority: P1
+status: active
+enabled: true
+precondition: 새 비회원 세션, 홈 배너와 헬스케어 인기상품 목록 노출
+last_verified: "2026-09-21"
+steps:
+  - action: navigate
+    target: home_page
+  - action: custom
+    name: open_home_banner

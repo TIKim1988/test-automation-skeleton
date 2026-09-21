@@ -50,6 +50,7 @@ export interface ElementDef {
   scope?: string; // 다른 element 이름으로 범위를 제한
   textRegex?: string;
   text?: string;
+  index?: number; // nth() 인덱스: 복수 매칭 요소 중 특정 인덱스 선택 (0부터 시작)
 }
 
 export interface SelectorMap {

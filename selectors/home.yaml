@@ -67,3 +67,58 @@ elements:
     name: 플레저 토이
     exact: true
     scope: main_scope
+
+  # ── 배너 ──────────────────────────────────────────────────────────────
+  # .home-banner-pagination 은 메인 히어로 배너에만 붙는 고유 클래스
+  home_banner_pagination:
+    css: .home-banner-pagination
+  # 현재 활성 슬라이드 링크를 가리킴 (배너 제일 위 section.max-w-7xl 내부)
+  home_banner_active_slide_link:
+    role: link
+    nameRegex: "^이벤트 배너:"
+    scope: home_banner_region
+    index: 0
+
+  # ── 인기상품 ──────────────────────────────────────────────────────────
+  # tablist 내 section(= 인기상품 섹션)의 첫 번째 슬라이드 활성 카드
+  popular_product_card:
+    role: link
+    nameRegex: 로마 베이브
+    scope: healthcare_panel
+
+  # ── 풋터 ──────────────────────────────────────────────────────────────
+  footer_terms_link:
+    role: link
+    name: 이용약관
+    exact: true
+    scope: footer_scope
+  footer_privacy_link:
+    role: link
+    name: 개인정보처리방침
+  footer_order_tracking_link:
+    role: link
+    name: 비회원 주문조회
+    exact: true
+    scope: footer_scope
+  footer_cs_faq_link:
+    role: link
+    name: 자주 찾는 질문
+
+  # ── 이동 후 대상 페이지 헤딩 ────────────────────────────────────────
+  # 이용약관 페이지 (/legal/terms-of-use) 의 메인 제목
+  terms_page_heading:
+    role: heading
+    name: 로마스토어 이용약관
+  # 비회원 주문조회 페이지 (/information/order-tracking) 의 메인 제목
+  order_tracking_page_heading:
+    role: heading
+    name: 비회원 주문조회
+    exact: true
+    scope: footer_scope
+
+  home_banner_region:
+    role: region
+    name: 이벤트 배너
+    exact: true
+  footer_scope:
+    role: contentinfo

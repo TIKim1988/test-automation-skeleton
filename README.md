@@ -1,4 +1,9 @@
-> 2026-09-08 재설계 구현과 검증 현황은 [test-health.md](test-health.md)를 참고해.
+> 2026-09-21 main 통합: 전체 29개 TC를 유지하고 예약 실행은 smoke 11개, 수동 회귀는 18개로 구분해. 실행 브랜치와 커밋은 Actions 요약과 메일에 표시해.
+> 홈 추가 6개와 환경변수, 화면 요소 기록 기능을 보존했고, 현재 숫자 애니메이션 표시를 반영했어. 과거 검증 수치는 해당 날짜 기록으로 봐야 해.
+
+> 최종 로컬 smoke는 10/11 통과, 전체 실행은 26/29 통과야. 약관 이동 1개와 가격 정렬 2개 실패가 남아 있어.
+
+> 재설계 구현과 날짜별 검증 현황은 [test-health.md](test-health.md)를 참고해.
 
 # 히스토리
 | 날짜 | 내용 |
@@ -91,7 +96,7 @@ npm run testcases:check
 
 CSV의 `status`가 실행 상태의 기준이야. `manual`과 `enabled: false`는 제외하고,
 `quarantine`은 일반 실행에서 skip으로 보고해. `npm run test:quarantine`으로 격리된 TC만 재검증해.
-현재 23개는 모두 active이고 PRODUCT-001, PRODUCT-002의 하드코딩 skip은 제거했어.
+현재 29개는 모두 active이고 PRODUCT-001, PRODUCT-002의 하드코딩 skip은 제거했어.
 P1 skip, 전체 skip, 빈 실행, 재시도 통과, 실행 오류는 정상 성공으로 집계하지 않아.
 
 ## 테스트케이스 스텝 어휘 (action 종류)
@@ -106,9 +111,9 @@ P1 skip, 전체 skip, 빈 실행, 재시도 통과, 실행 오류는 정상 성�
 npm install
 npx playwright install --with-deps chromium   # 최초 1회
 npm run check                                 # 타입, CSV, 단위 테스트
-npx playwright test                            # lomastore.com 대상, 23개
+npx playwright test                            # lomastore.com 대상, 29개
 npm run report:summary                        # 실패 또는 flaky가 있으면 비정상 종료
-npm run test:smoke                             # 매일 실행하는 핵심 8개
+npm run test:smoke                             # 매일 실행하는 핵심 11개
 npm run test:regression                        # 회귀 테스트만 수동 실행
 ```
 

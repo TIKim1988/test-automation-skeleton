@@ -1,4 +1,11 @@
 import { expect, type Page, type Locator } from '@playwright/test';
+import { displayedText } from './rendered-text';
+
+export function productTotals(page: Page) { return page.getByRole('main').getByText(/^총\s/).locator('..'); }
+export async function productTotal(page: Page) { return won(await displayedText(productTotals(page).locator('number-flow-react').nth(1))); }
+export async function assertProductQuantity(page: Page, quantity: number) {
+  await expect.poll(() => displayedText(productTotals(page).locator('number-flow-react').nth(0))).toBe(String(quantity));
+}
 
 export function won(text: string): number {
   const match = text.trim().match(/^(-?[\d,]+)원$/);
@@ -6,7 +13,7 @@ export function won(text: string): number {
   return Number(match[1].replaceAll(',', ''));
 }
 export function moneyByLabel(page: Page, label: string): Locator {
-  return page.getByRole('main').getByText(label, { exact: true }).locator('..').getByText(/^-?[\d,]+원$/);
+  return page.getByRole('main').getByText(label, { exact: true }).locator('..').locator('number-flow-react');
 }
 export class CommercePage {
   constructor(readonly page: Page, readonly product: { guest_accessible_slug: string; guest_accessible_name: string }) {}
@@ -17,8 +24,8 @@ export class CommercePage {
   async addProduct() {
     await this.page.goto(`/product/${this.product.guest_accessible_slug}`);
     await expect(this.page.getByRole('main').getByRole('heading', { name: this.product.guest_accessible_name, exact: true })).toBeVisible();
-    await expect(this.page.getByText('총 1개', { exact: true })).toBeVisible();
-    const unitPrice = won(await this.page.getByText('총 1개', { exact: true }).locator('..').getByText(/^[\d,]+원$/).innerText());
+    await assertProductQuantity(this.page, 1);
+    const unitPrice = await productTotal(this.page);
     await this.page.getByRole('button', { name: '장바구니 담기', exact: true }).click();
     const dialog = this.page.getByRole('dialog', { name: '장바구니에 담았어요', exact: true });
     // dialog wrapper는 크기가 0일 수 있어. 사용자가 보는 제목과 버튼을 기다려.
@@ -35,12 +42,12 @@ export class CommercePage {
     await expect(row.getByRole('link', { name: this.product.guest_accessible_name, exact: true }))
       .toHaveAttribute('href', `/product/${this.product.guest_accessible_slug}`);
     const quantityControl = row.getByRole('button', { name: '수량 증가', exact: true }).locator('..');
-    await expect(quantityControl.getByText(String(quantity), { exact: true })).toBeVisible();
-    await expect(this.page.getByRole('button', { name: `${quantity}개 상품 주문하기`, exact: true })).toBeVisible();
+    await expect.poll(() => displayedText(quantityControl.locator('number-flow-react'))).toBe(String(quantity));
+    await expect.poll(() => displayedText(this.page.getByRole('button', {name:/상품 주문하기$/}))).toBe(`${quantity}개상품주문하기`);
     if (unitPrice !== undefined) {
-      await expect.poll(async () => won(await moneyByLabel(this.page, '총 상품 금액').innerText())).toBe(unitPrice * quantity);
-      const amounts = row.locator('span').filter({ hasText: /^[\d,]+원$/ });
-      await expect(amounts.filter({ hasText: new RegExp(`^${(unitPrice * quantity).toLocaleString('en-US')}원$`) })).toHaveCount(1);
+      await expect.poll(async () => won(await displayedText(moneyByLabel(this.page, '총 상품 금액')))).toBe(unitPrice * quantity);
+      const lineTotal = row.locator('number-flow-react').last();
+      await expect.poll(async () => won(await displayedText(lineTotal))).toBe(unitPrice * quantity);
     }
   }
   async assertCheckout(unitPrice: number) {
@@ -49,8 +56,8 @@ export class CommercePage {
     await expect(summary.getByRole('link', { name: this.product.guest_accessible_name, exact: true }))
       .toHaveAttribute('href', `/product/${this.product.guest_accessible_slug}`);
     await expect(summary.getByText('1개', { exact: true })).toBeVisible();
-    await expect.poll(async () => won(await moneyByLabel(this.page, '상품 합계').innerText())).toBe(unitPrice);
+    await expect.poll(async () => won(await displayedText(moneyByLabel(this.page, '상품 합계')))).toBe(unitPrice);
     // 주소, 배송, 할인 적용 전 상품 합계만 비교해. 최종 결제는 실행하지 않아.
-    await expect(summary.getByRole('button', { name: /^총 [\d,]+원 결제하기$/ })).toBeVisible();
+    await expect(summary.getByRole('button', { name: /결제하기$/ })).toBeVisible();
   }
 }

@@ -1,15 +1,34 @@
 import { expect, test } from '@playwright/test';
 import type { CustomStepFn } from '../runner/interpreter';
-import { CommercePage, won } from '../pages/commerce';
+import { CommercePage, won, productTotal, assertProductQuantity } from '../pages/commerce';
 
 export const customSteps: Record<string, CustomStepFn> = {
+  open_home_banner: async (page) => {
+    await page.getByRole('button', {name:'1번 슬라이드로 이동', exact:true}).click();
+    const link = page.getByRole('region', {name:'이벤트 배너', exact:true}).getByRole('link').first();
+    const href = await link.getAttribute('href');
+    if (!href || !/^\/(event|product|brand-category)\//.test(href)) throw new Error('배너 목적지 경로가 유효하지 않아.');
+    await link.click();
+    await expect(page).toHaveURL(new URL(href, page.url()).href);
+    await expect(page.getByRole('main')).toBeVisible();
+  },
+  open_home_product: async (page) => {
+    const link = page.getByRole('tabpanel', {name:'헬스케어', exact:true}).getByRole('link', {name:/로마 베이브/});
+    const href = await link.getAttribute('href');
+    if (!href || !href.startsWith('/product/')) throw new Error('인기상품 목적지가 유효하지 않아.');
+    await link.click();
+    await expect(page).toHaveURL(new URL(href, page.url()).href);
+    await expect(page.getByRole('main').getByRole('heading', {name:'로마 베이브', exact:true})).toBeVisible();
+  },
   capture_product_price: async (page, _step, ctx) => {
-    ctx.unitPrice = won(await page.getByText('총 1개', {exact:true}).locator('..').getByText(/^[\d,]+원$/).innerText());
+    await assertProductQuantity(page, 1);
+    ctx.unitPrice = await productTotal(page);
   },
   assert_product_price: async (page, step, ctx) => {
     const quantity = Number(step.value);
     if (typeof ctx.unitPrice !== 'number' || !Number.isInteger(quantity) || quantity < 1) throw new Error('기준 가격과 수량이 필요해.');
-    await expect.poll(async () => won(await page.getByText(`총 ${quantity}개`, {exact:true}).locator('..').getByText(/^[\d,]+원$/).innerText())).toBe(ctx.unitPrice * quantity);
+    await assertProductQuantity(page, quantity);
+    await expect.poll(() => productTotal(page)).toBe(ctx.unitPrice * quantity);
   },
   prepare_cart: async (page, _step, ctx) => {
     const commerce = new CommercePage(page, ctx.product as ConstructorParameters<typeof CommercePage>[1]);
@@ -35,7 +54,7 @@ export const customSteps: Record<string, CustomStepFn> = {
     await expect(page).toHaveURL((url) => url.pathname === '/search' && url.searchParams.get('q') === (ctx.search as {keyword_no_match:string}).keyword_no_match);
     await expect(page.getByRole('main').getByRole('heading', {name:'검색 결과가 없습니다.', exact:true})).toBeVisible();
     await expect(page.getByRole('main').locator('article')).toHaveCount(0);
-    await expect(page.getByRole('main').getByText('0개 상품', {exact:true})).toBeVisible();
+    // 결과 없음 heading과 상품 0개를 함께 검증해 로딩 중 빈 상태 통과를 막아.
   },
   assert_product_list: async (page) => {
     await expect.poll(() => page.getByRole('main').locator('article').count()).toBeGreaterThan(0);

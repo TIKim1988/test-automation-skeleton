@@ -20,12 +20,12 @@ elements:
     exact: true
     scope: main_scope
   total_quantity_label:
-    textRegex: ^총 \d+개$
+    textRegex: ^총\s
     scope: main_scope
   product_wishlist_button:
     role: button
     name: 찜하기
-    scope: main_scope
+    scope: product_toolbar
     exact: true
   product_quantity_increase_button:
     role: button
@@ -37,3 +37,7 @@ elements:
     name: 수량 감소
     scope: main_scope
     exact: true
+
+  product_toolbar:
+    css: div:has(> button[aria-label="공유"])
+    scope: main_scope

@@ -20,6 +20,7 @@ on:
 
 permissions:
   contents: read
+  issues: write
 
 jobs:
   test:
@@ -51,12 +52,16 @@ jobs:
           else
             echo "TEST_TAGS=$suite" >> "$GITHUB_ENV"
           fi
+          echo "TEST_SUITE=$suite" >> "$GITHUB_ENV"
           echo "Running suite: $suite"
 
       - name: Run Playwright tests
         id: tests
         run: npx playwright test
         continue-on-error: true
+        env:
+          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
 
       - name: Summarize results
         id: summary
@@ -64,9 +69,17 @@ jobs:
         run: npm run report:summary
         continue-on-error: true
 
-      - name: Zip HTML report
+      - name: Record execution revision
         if: always()
-        run: zip -r playwright-report.zip playwright-report
+        run: |
+          echo "Branch: $GITHUB_REF_NAME, commit: $GITHUB_SHA, suite: ${TEST_TAGS:-all}" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Sync failure issues
+        if: always() && github.event_name != 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: node automation/ci/sync-failure-issues.js
 
       - name: Upload report artifact
         if: always()
@@ -83,16 +96,17 @@ jobs:
           server_address: smtp.gmail.com
           server_port: 465
           secure: true
-          username: ${{ secrets.GMAIL_USERNAME }}
-          password: ${{ secrets.GMAIL_APP_PASSWORD }}
-          from: Playwright Automation <${{ secrets.GMAIL_USERNAME }}>
+          username: k39008116@gmail.com
+          password: ${{ secrets.GMAIL_SECRET_KEY }}
+          from: Playwright Automation <k39008116@gmail.com>
           to: k39008116@gmail.com
           subject: "${{ steps.summary.outputs.icon }} lomastore 자동화 결과 - 통과 ${{ steps.summary.outputs.passed }} / 실패 ${{ steps.summary.outputs.failed }} / 재시도 통과 ${{ steps.summary.outputs.flaky }} / 스킵 ${{ steps.summary.outputs.skipped }} / 실행 오류 ${{ steps.summary.outputs.errors }}"
           html_body: |
-            <p>실행 결과는 첨부된 <code>playwright-report.zip</code>의 <code>index.html</code>에서 확인하세요.</p>
+            <p>실행 브랜치: ${{ github.ref_name }}, 커밋: ${{ github.sha }}, 범위: ${{ env.TEST_SUITE }}</p>
+            <p><a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">실행 로그와 HTML 리포트 아티팩트</a></p>
             <p>통과: ${{ steps.summary.outputs.passed }} / 실패: ${{ steps.summary.outputs.failed }} / 재시도 통과: ${{ steps.summary.outputs.flaky }} / 스킵: ${{ steps.summary.outputs.skipped }} / 실행 오류: ${{ steps.summary.outputs.errors }}</p>
             <p>실패 목록과 오류 첫 줄은 <code>email-summary.html</code> 첨부파일에서 확인하세요.</p>
-          attachments: playwright-report.zip,test-results/email-summary.html
+          attachments: test-results/email-summary.html
 
       - name: Fail job if tests or result processing failed
         if: always() && (steps.tests.outcome != 'success' || steps.summary.outcome != 'success' || steps.summary.outputs.ok != 'true')
