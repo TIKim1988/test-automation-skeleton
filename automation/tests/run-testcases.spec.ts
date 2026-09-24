@@ -1,3 +1,4 @@
+import { installOverlayHandler } from '../pages/overlays';
 import { test } from '@playwright/test';
 import path from 'path';
 import { loadTestCases, loadFixtures } from '../runner/loader';
@@ -29,6 +30,7 @@ for (const testCase of testCases) {
   register(`${testCase.id} - ${testCase.title}`, {
     annotation: [{ type: 'case_id', description: testCase.id }, { type: 'priority', description: testCase.priority ?? 'P2' }],
   }, async ({ page }) => {
+    await installOverlayHandler(page);
     let captured = {...baseline};
     const heal = buildHealContext({testId:testCase.id, baseline, onHeal:recorder.onHeal,
       onCapture:(name, fp) => { captured = mergeFingerprint(captured, name, fp); }});

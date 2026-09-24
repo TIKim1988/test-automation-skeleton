@@ -6,6 +6,7 @@ export const customSteps: Record<string, CustomStepFn> = {
   open_home_banner: async (page) => {
     await page.getByRole('button', {name:'1번 슬라이드로 이동', exact:true}).click();
     const link = page.getByRole('region', {name:'이벤트 배너', exact:true}).getByRole('link').first();
+    await expect(link).toBeVisible();
     const href = await link.getAttribute('href');
     if (!href || !/^\/(event|product|brand-category)\//.test(href)) throw new Error('배너 목적지 경로가 유효하지 않아.');
     await link.click();
@@ -14,6 +15,7 @@ export const customSteps: Record<string, CustomStepFn> = {
   },
   open_home_product: async (page) => {
     const link = page.getByRole('tabpanel', {name:'헬스케어', exact:true}).getByRole('link', {name:/로마 베이브/});
+    await expect(link).toBeVisible();
     const href = await link.getAttribute('href');
     if (!href || !href.startsWith('/product/')) throw new Error('인기상품 목적지가 유효하지 않아.');
     await link.click();

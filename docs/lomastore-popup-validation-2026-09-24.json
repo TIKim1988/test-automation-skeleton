@@ -1,0 +1,35 @@
+{
+  "browserContracts": {
+    "passed": 4
+  },
+  "unitTests": {
+    "passed": 20
+  },
+  "runs": {
+    "smoke": {
+      "startTime": "2026-09-24T04:36:15.989Z",
+      "duration": 46333.831000000006,
+      "expected": 10,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "homeRegression": {
+      "startTime": "2026-09-24T04:36:54.574Z",
+      "duration": 13318.699999999999,
+      "expected": 4,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "home005Repeat": {
+      "startTime": "2026-09-24T04:37:27.845Z",
+      "duration": 20080.705,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    }
+  },
+  "remaining": "HOME-005 intermittently reaches product detail but add-to-cart button is absent within 5 seconds. Popup dismissal and navigation succeeded. Kept as failure without retrying business actions."
+}

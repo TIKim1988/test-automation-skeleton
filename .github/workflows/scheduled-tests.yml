@@ -44,6 +44,9 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
+      - name: Verify popup handling
+        run: npm run test:overlays
+
       - name: Select test suite
         run: |
           suite="${{ github.event_name != 'workflow_dispatch' && 'smoke' || inputs.suite }}"
