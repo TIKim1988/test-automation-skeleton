@@ -1,0 +1,17 @@
+id: PRODUCT-006
+title: 상품 상세에서 수량 2를 선택해 담으면 장바구니 수량과 금액이 일치한다
+tags:
+  - regression
+  - product
+priority: P2
+status: active
+enabled: true
+precondition: 새 브라우저 컨텍스트의 비회원 세션; 대표 상품 재고 있음; 테스트가 장바구니를 독립 준비
+last_verified: "2026-10-07"
+steps:
+  - action: custom
+    value: "2"
+    name: prepare_cart
+  - action: custom
+    value: "2"
+    name: assert_cart

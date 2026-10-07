@@ -20,6 +20,11 @@ elements:
   remove_item_confirm_button:
     role: button
     name: 빼기
+    exact: true
+  remove_item_cancel_button:
+    role: button
+    name: 취소
+    exact: true
   order_button:
     role: button
     nameRegex: 상품 주문하기$

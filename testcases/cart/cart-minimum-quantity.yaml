@@ -1,0 +1,29 @@
+id: CART-006
+title: 장바구니 수량 1에서 감소 대신 항목 삭제가 표시되고 수량과 금액이 유지된다
+tags:
+  - regression
+  - cart
+priority: P2
+status: active
+enabled: true
+precondition: 새 브라우저 컨텍스트의 비회원 세션; 대표 상품 재고 있음; 테스트가 장바구니를 독립 준비
+last_verified: "2026-10-07"
+steps:
+  - action: custom
+    name: prepare_cart
+  - action: assert_hidden
+    target: cart_quantity_decrease_button
+  - action: assert_visible
+    target: delete_item_button
+  - action: custom
+    value: "1"
+    name: assert_cart
+  - action: custom
+    name: reload_page
+  - action: assert_hidden
+    target: cart_quantity_decrease_button
+  - action: assert_visible
+    target: delete_item_button
+  - action: custom
+    value: "1"
+    name: assert_cart

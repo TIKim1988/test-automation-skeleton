@@ -1,0 +1,28 @@
+id: CART-011
+title: 장바구니 비우기는 새로고침 뒤에도 유지되고 상품을 다시 담을 수 있다
+tags:
+  - regression
+  - cart
+priority: P2
+status: active
+enabled: true
+precondition: 새 브라우저 컨텍스트의 비회원 세션; 대표 상품 재고 있음; 테스트가 장바구니를 독립 준비
+last_verified: "2026-10-07"
+steps:
+  - action: custom
+    name: prepare_cart
+  - action: click
+    target: clear_cart_button
+  - action: custom
+    name: confirm_cart_clear
+  - action: custom
+    name: assert_empty_cart
+  - action: custom
+    name: reload_page
+  - action: custom
+    name: assert_empty_cart
+  - action: custom
+    name: prepare_cart
+  - action: custom
+    value: "1"
+    name: assert_cart

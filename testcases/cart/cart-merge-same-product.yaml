@@ -1,0 +1,23 @@
+id: CART-008
+title: 같은 상품을 다시 담으면 행 1개에 수량 2와 합산 금액이 표시된다
+tags:
+  - regression
+  - cart
+priority: P2
+status: active
+enabled: true
+precondition: 새 브라우저 컨텍스트의 비회원 세션; 대표 상품 재고 있음; 테스트가 장바구니를 독립 준비
+last_verified: "2026-10-07"
+steps:
+  - action: custom
+    name: prepare_cart
+  - action: custom
+    name: add_same_product
+  - action: custom
+    value: "2"
+    name: assert_cart
+  - action: custom
+    name: reload_page
+  - action: custom
+    value: "2"
+    name: assert_cart

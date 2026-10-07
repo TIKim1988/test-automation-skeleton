@@ -7,7 +7,7 @@ const { spawnSync } = require('node:child_process');
 const { resolveTemplate, loadFixtures } = require('../runner/loader.ts');
 const { loadSelectors } = require('../runner/selectors.ts');
 const { selectCases } = require('../runner/selection.ts');
-const { won } = require('../pages/commerce.ts');
+const { won, positiveQuantity } = require('../pages/commerce.ts');
 const root = path.resolve(__dirname, '../..');
 
 function temporary(fn) { const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'loma-contract-')); try { fn(dir); } finally { fs.rmSync(dir, {recursive:true,force:true}); } }
@@ -46,6 +46,11 @@ test('수동과 disabled는 제외, quarantine은 보고 대상과 재검증 대
 test('가격 파서는 할인 음수와 쉼표를 유지하고 모호한 값은 거부한다',()=>{
   assert.equal(won('56,000원'),56000);assert.equal(won('-24,000원'),-24000);
   assert.throws(()=>won('56,000원 80,000원'));assert.throws(()=>won(''));
+});
+test('수량 기본값은 누락에만 적용하고 0, 음수, 소수, 무한대와 빈 값은 거부한다',()=>{
+  assert.equal(positiveQuantity(undefined),1);
+  assert.equal(positiveQuantity('2'),2);
+  for (const value of ['','0','-1','1.5','Infinity','typo']) assert.throws(()=>positiveQuantity(value),/1 이상의 정수/);
 });
 test('CSV의 fixture 오타는 생성 전에 차단한다',()=>invalidImport(dir=>{
   const p=path.join(dir,'testcase-management/steps.csv');fs.writeFileSync(p,fs.readFileSync(p,'utf8').replace('${checkout.guest_orderer.name}','${checkout.typo.name}'));

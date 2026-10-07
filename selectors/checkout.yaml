@@ -21,7 +21,9 @@ elements:
     scope: main_scope
   address_search_button:
     role: button
-    name: 주소 찾기
+    name: 주소찾기
+    exact: true
+    scope: main_scope
   payment_method_card_radio:
     role: radio
     name: 신용카드
@@ -49,6 +51,10 @@ elements:
 
   payment_method_transfer_label:
     text: 퀵계좌이체
+    exact: true
+    scope: main_scope
+  payment_method_card_label:
+    text: 신용카드
     exact: true
     scope: main_scope
   payment_method_bacs_label:

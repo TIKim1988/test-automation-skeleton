@@ -7,17 +7,19 @@ priority: P2
 status: active
 enabled: true
 precondition: 새 브라우저 컨텍스트의 비로그인 세션; 대표 상품 재고 있음; 테스트가 상품 1개를 독립적으로 담고 완료 확인
-last_verified: "2026-09-21"
+last_verified: "2026-10-07"
 steps:
   - action: custom
     name: prepare_cart
-  - action: click
-    target: cart_quantity_increase_button
+  - action: custom
+    value: increase
+    name: change_cart_quantity
   - action: custom
     value: "2"
     name: assert_cart
-  - action: click
-    target: cart_quantity_decrease_button
+  - action: custom
+    value: decrease
+    name: change_cart_quantity
   - action: custom
     value: "1"
     name: assert_cart

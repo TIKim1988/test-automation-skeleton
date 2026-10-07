@@ -1,0 +1,21 @@
+id: CART-009
+title: 서로 다른 두 상품 중 하나를 삭제하면 다른 상품과 합계가 유지된다
+tags:
+  - regression
+  - cart
+priority: P2
+status: active
+enabled: true
+precondition: 새 브라우저 컨텍스트의 비회원 세션; 대표 상품 재고 있음; 테스트가 장바구니를 독립 준비; 두 fixture 상품의 비회원 접근과 재고 유효
+last_verified: "2026-10-07"
+steps:
+  - action: custom
+    name: prepare_two_product_cart
+  - action: custom
+    name: remove_primary_cart_item
+  - action: custom
+    name: assert_secondary_cart
+  - action: custom
+    name: reload_page
+  - action: custom
+    name: assert_secondary_cart

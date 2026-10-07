@@ -14,7 +14,8 @@
     "check": "node --check scripts/summarize-results.mjs && node --check scripts/sync-testcases.mjs && npm run typecheck && npm run testcases:check && npm run test:unit",
     "test:quarantine": "TEST_QUARANTINE=1 playwright test",
     "report:summary": "node scripts/summarize-results.mjs",
-    "test:overlays": "playwright test --config playwright.contracts.config.ts"
+    "test:overlays": "playwright test --config playwright.contracts.config.ts overlays.spec.ts",
+    "test:contracts": "playwright test --config playwright.contracts.config.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.47.0",

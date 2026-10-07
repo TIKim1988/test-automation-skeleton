@@ -1,0 +1,29 @@
+id: CHECKOUT-007
+title: 결제수단을 다시 신용카드로 바꾸면 이전 수단의 선택이 해제된다
+tags:
+  - regression
+  - checkout
+priority: P2
+status: active
+enabled: true
+precondition: 새 브라우저 컨텍스트의 비회원 세션; 대표 상품 재고 있음; 테스트가 장바구니를 독립 준비
+last_verified: "2026-10-07"
+steps:
+  - action: custom
+    name: prepare_cart
+  - action: click
+    target: order_button
+  - action: custom
+    name: assert_checkout
+  - action: click
+    target: payment_method_bacs_label
+  - action: assert_checked
+    target: payment_method_bacs_radio
+  - action: assert_unchecked
+    target: payment_method_card_radio
+  - action: click
+    target: payment_method_card_label
+  - action: assert_checked
+    target: payment_method_card_radio
+  - action: assert_unchecked
+    target: payment_method_bacs_radio

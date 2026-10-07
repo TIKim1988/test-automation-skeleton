@@ -1,0 +1,24 @@
+id: CHECKOUT-006
+title: 장바구니 수량 2가 주문서 수량과 상품 합계에 반영된다
+tags:
+  - regression
+  - checkout
+priority: P2
+status: active
+enabled: true
+precondition: 새 브라우저 컨텍스트의 비회원 세션; 대표 상품 재고 있음; 테스트가 장바구니를 독립 준비
+last_verified: "2026-10-07"
+steps:
+  - action: custom
+    name: prepare_cart
+  - action: custom
+    value: increase
+    name: change_cart_quantity
+  - action: custom
+    value: "2"
+    name: assert_cart
+  - action: click
+    target: order_button
+  - action: custom
+    value: "2"
+    name: assert_checkout

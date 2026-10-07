@@ -1,0 +1,998 @@
+{
+  "date": "2026-10-07",
+  "timezone": "Asia/Seoul",
+  "base_revision": "d30c41a659d9bccda17c51e966554620039fef44",
+  "environment": {
+    "browser": "Chromium desktop",
+    "session": "fresh guest context per case",
+    "workers": 1,
+    "retries": 0,
+    "base_url": "https://lomastore.com"
+  },
+  "counts": {
+    "total": 43,
+    "passed": 40,
+    "failed": 3,
+    "flaky": 0,
+    "skipped": 0,
+    "execution_errors": 0
+  },
+  "duration_ms": 190234.75699999998,
+  "new_case_ids": [
+    "SEARCH-004",
+    "SEARCH-005",
+    "SEARCH-006",
+    "SEARCH-007",
+    "CART-006",
+    "CART-007",
+    "CART-008",
+    "CART-009",
+    "CART-010",
+    "CART-011",
+    "PRODUCT-006",
+    "CHECKOUT-006",
+    "CHECKOUT-007",
+    "CHECKOUT-008"
+  ],
+  "new_passed": 13,
+  "static_checks": {
+    "typecheck": "passed",
+    "csv_yaml_sync": "passed",
+    "unit_tests_passed": 21,
+    "browser_contracts_passed": 8
+  },
+  "cases": [
+    {
+      "id": "CART-005",
+      "title": "CART-005 - 장바구니 비우기 확인 팝업에서 취소하면 상품이 유지된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 5019,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "CART-011",
+      "title": "CART-011 - 장바구니 비우기는 새로고침 뒤에도 유지되고 상품을 다시 담을 수 있다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 11278,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "CART-004",
+      "title": "CART-004 - 장바구니를 비우면 빈 장바구니 안내와 이동 버튼이 노출된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 7434,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "CART-010",
+      "title": "CART-010 - 새 비회원 세션의 빈 장바구니에는 상품과 주문 버튼이 없다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 873,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "CART-008",
+      "title": "CART-008 - 같은 상품을 다시 담으면 행 1개에 수량 2와 합산 금액이 표시된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 9357,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "CART-006",
+      "title": "CART-006 - 장바구니 수량 1에서 감소 대신 항목 삭제가 표시되고 수량과 금액이 유지된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 5627,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "CART-002",
+      "title": "CART-002 - 장바구니 수량 1→2→1 변경과 상품 금액, 새로고침 후 상태가 일치한다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 7477,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "CART-007",
+      "title": "CART-007 - 상품 삭제 확인창에서 취소하면 수량과 금액이 유지된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 5951,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "CART-003",
+      "title": "CART-003 - 장바구니 상품 삭제 시 확인 팝업 후 삭제된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 5945,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "CART-009",
+      "title": "CART-009 - 서로 다른 두 상품 중 하나를 삭제하면 다른 상품과 합계가 유지된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 10881,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "CART-001",
+      "title": "CART-001 - 장바구니에 담긴 상품과 주문 버튼이 노출된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 4746,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "CHECKOUT-008",
+      "title": "CHECKOUT-008 - 주문서에서 뒤로 가면 장바구니 수량과 금액이 유지된다",
+      "status": "unexpected",
+      "attempts": [
+        {
+          "status": "failed",
+          "retry": 0,
+          "duration_ms": 12317,
+          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: \"2\"\nReceived: \"1\"\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate"
+        }
+      ]
+    },
+    {
+      "id": "CHECKOUT-005",
+      "title": "CHECKOUT-005 - 주문서 작성 후 최종 결제 버튼이 노출된다 (실제 결제는 수행하지 않음)",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 5547,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "CHECKOUT-002",
+      "title": "CHECKOUT-002 - 주문자와 수령자에 서로 다른 값을 입력하면 각각 유지된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 5442,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "CHECKOUT-001",
+      "title": "CHECKOUT-001 - 비로그인 상태에서도 장바구니의 주문하기를 통해 주문서 화면에 진입할 수 있다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 5510,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "CHECKOUT-003",
+      "title": "CHECKOUT-003 - 주문서 화면에서 결제 수단을 선택할 수 있다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 5447,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "CHECKOUT-007",
+      "title": "CHECKOUT-007 - 결제수단을 다시 신용카드로 바꾸면 이전 수단의 선택이 해제된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 6045,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "CHECKOUT-006",
+      "title": "CHECKOUT-006 - 장바구니 수량 2가 주문서 수량과 상품 합계에 반영된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 6459,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "CHECKOUT-004",
+      "title": "CHECKOUT-004 - 주문서 화면에 이용약관/개인정보처리방침 안내가 노출된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 5426,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "HOME-004",
+      "title": "HOME-004 - 배너 슬라이드 클릭 후 사이트 헤더 내비게이션이 유지된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 1734,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "HOME-003",
+      "title": "HOME-003 - 배너 슬라이드 클릭 시 해당 이벤트, 상품 페이지로 이동한다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 1717,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "HOME-008",
+      "title": "HOME-008 - 풋터 비회원 주문조회 링크 클릭 시 주문조회 페이지로 이동한다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 1269,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "HOME-007",
+      "title": "HOME-007 - 풋터 이용약관 링크 클릭 시 이용약관 페이지로 이동한다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 1255,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "HOME-001",
+      "title": "HOME-001 - 홈페이지 접속 시 헤더 내비게이션과 인기상품 영역이 노출된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 1212,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "HOME-005",
+      "title": "HOME-005 - 인기상품 카드 클릭 시 상품 상세 페이지로 이동한다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 3248,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "HOME-006",
+      "title": "HOME-006 - 인기상품 카드 클릭 후 상품 상세에서 찜하기, 공유 버튼이 노출된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 1935,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "HOME-002",
+      "title": "HOME-002 - 인기상품 영역의 카테고리 탭을 클릭해도 에러 없이 전환된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 1384,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "ORDER-001",
+      "title": "ORDER-001 - 비회원 주문조회 화면에 주문번호/이메일 입력란과 조회 버튼이 노출된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 540,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "PRODUCT-003",
+      "title": "PRODUCT-003 - 장바구니 담기 클릭 시 장바구니에 상품이 추가된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 5560,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "PRODUCT-006",
+      "title": "PRODUCT-006 - 상품 상세에서 수량 2를 선택해 담으면 장바구니 수량과 금액이 일치한다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 4779,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "PRODUCT-001",
+      "title": "PRODUCT-001 - 상품 상세 페이지에 상품명/수량조절/장바구니담기 버튼이 노출된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 1470,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "PRODUCT-004",
+      "title": "PRODUCT-004 - 로그인이 필요한 상품에 비로그인 상태로 접근하면 로그인 안내 화면이 노출된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 1365,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "PRODUCT-002",
+      "title": "PRODUCT-002 - 상품 상세 수량 1→2→1 변경에 따라 합계 금액이 일치한다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 1711,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "PRODUCT-005",
+      "title": "PRODUCT-005 - 비로그인 상태에서 찜하기 버튼을 누르면 로그인 화면으로 이동한다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 1093,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "SEARCH-003",
+      "title": "SEARCH-003 - 검색 결과 0건이면 결과 없음 안내와 빈 상품 목록이 표시된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 1588,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "SEARCH-007",
+      "title": "SEARCH-007 - 검색 상품을 클릭하면 해당 상품 상세의 식별값과 구매 버튼이 표시된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 3680,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "SEARCH-004",
+      "title": "SEARCH-004 - 검색 결과 없음 상태에서 정상 검색어로 바꾸면 상품 목록이 복구된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 1753,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "SEARCH-006",
+      "title": "SEARCH-006 - 검색 결과를 새로고침해도 검색어와 대표 상품이 유지된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 2329,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "SEARCH-005",
+      "title": "SEARCH-005 - 검색어를 바꾸면 URL과 결과 목록이 새 검색어에 맞게 갱신된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 1754,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "SEARCH-002",
+      "title": "SEARCH-002 - 검색 상품의 표시 판매가가 낮은가격순과 높은가격순으로 정렬된다",
+      "status": "unexpected",
+      "attempts": [
+        {
+          "status": "failed",
+          "retry": 0,
+          "duration_ms": 7011,
+          "error": "Error: 화면에 표시된 상품 판매가가 선택한 순서로 정렬되어야 해.\n\n화면에 표시된 상품 판매가가 선택한 순서로 정렬되어야 해.\n\nexpect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate"
+        }
+      ]
+    },
+    {
+      "id": "SEARCH-001",
+      "title": "SEARCH-001 - 검색창에 키워드를 입력해 검색하면 검색 결과 화면이 노출된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 2340,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "STORE-001",
+      "title": "STORE-001 - 스토어에서 카테고리를 선택하면 해당 카테고리 상품 목록이 노출된다",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration_ms": 2837,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "STORE-002",
+      "title": "STORE-002 - 카테고리 상품의 표시 판매가가 가격낮은순과 가격높은순으로 정렬된다",
+      "status": "unexpected",
+      "attempts": [
+        {
+          "status": "failed",
+          "retry": 0,
+          "duration_ms": 6901,
+          "error": "Error: 화면에 표시된 상품 판매가가 선택한 순서로 정렬되어야 해.\n\n화면에 표시된 상품 판매가가 선택한 순서로 정렬되어야 해.\n\nexpect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate"
+        }
+      ]
+    }
+  ],
+  "not_verified": [
+    "real payment or order creation",
+    "mobile browser stability",
+    "shipping and coupon calculations",
+    "long term repeated success rate"
+  ],
+  "diagnostics": {
+    "clear_before_response": "DELETE /api/cart was cancelled by immediate reload in first run; wait for successful response and body completion added",
+    "checkout_back": "PATCH /api/cart returned HTTP 200 with item quantity 2; after browser back, rendered cart quantity was 1 in targeted validation; server and frontend root cause not confirmed"
+  },
+  "price_observations": [
+    {
+      "id": "SEARCH-002",
+      "url": "https://lomastore.com/search?q=%EC%A0%A4&sort=price_asc",
+      "direction": "asc",
+      "products": [
+        {
+          "text": "리리러피 밸런스 젤 탠저린 포레스트\n탠저린 | 프레쉬 리프 | 재스민 | 네롤리\n20%28,000원\n21\n4.95 (253)",
+          "price": 28000
+        },
+        {
+          "text": "맥심 ㄹㅇㅊㅊ 001 콘돔\n충분한 윤환젤로 더 촉촉하게 사랑하세요 ㄹㅇㅊㅊ 콘돔\n30%4,200원\n39\n4.83 (6)",
+          "price": 4200
+        },
+        {
+          "text": "로마 로션 3ml 10개\n로마 캔들에 동봉되어있는 남성용 로마젤 3ml*10개입\n10%4,500원\n109\n4.86 (22)",
+          "price": 4500
+        },
+        {
+          "text": "리리러피 밸런스 젤 20ml\n30분 동안 유지되는 촉촉함, 적정 pH밸런스와 오스몰농도를 맞춰 여성 친화적인 마사지젤\n20%4,800원\n58\n4.90 (49)",
+          "price": 4800
+        },
+        {
+          "text": "리리러피 밸런스 젤 원 바이트 오브 피그 20ml\n무화과 | 코코넛 | 그린 리프 | 샌달우드\n20%4,800원\n89\n5.00 (14)",
+          "price": 4800
+        },
+        {
+          "text": "리리러피 밸런스 젤 블랭킷 오버 스노우 20ml\n코튼 | 앰버 | 바닐라 | 머스크\n20%4,800원\n39\n5.00 (17)",
+          "price": 4800
+        },
+        {
+          "text": "리리러피 밸런스 젤 탠저린 포레스트 20ml\n탠저린 | 프레쉬 리프 | 재스민 | 네롤리\n20%4,800원\n16\n5.00 (7)",
+          "price": 4800
+        },
+        {
+          "text": "HOT🔥\n로마 모어 리얼 001 콘돔 3개입\n더 리얼하게, 더 사랑하세요.\n9%5,500원\n18\n4.96 (96)",
+          "price": 5500
+        },
+        {
+          "text": "세이브 프리미엄 콘돔 3pcs\n틴케이스의 휴대하기 편한 세이브 프리미엄 콘돔\n17%7,900원\n7\n4.25 (4)",
+          "price": 7900
+        },
+        {
+          "text": "엔시토 립&리브드 콘돔 10p\n밀림현상이 적은 굴곡 가득한 립&리브드 콘돔\n8%7,900원\n4\n5.00 (2)",
+          "price": 7900
+        },
+        {
+          "text": "엔시토 워밍 콘돔10p\n발열 윤활 젤이 들어있어 수분과 만나면 따뜻해지는 온열 콘돔\n20%9,300원\n1\n3.67 (3)",
+          "price": 9300
+        },
+        {
+          "text": "엔시토 롱 플러스 딕헤드 콘돔 10p\n귀두부분만 두껍게하여 벤조카인없이 사정지연효과가 있는 딕헤드 콘돔\n20%9,300원\n9\n4.71 (7)",
+          "price": 9300
+        },
+        {
+          "text": "엔시토 슈퍼 도티드 콘돔 10p\n컨츄어 타입의 안정적인 착용감의 도트 돌출형 콘돔\n21%9,500원\n2\n1.00 (1)",
+          "price": 9500
+        },
+        {
+          "text": "ㄹㅇㅊㅊ 스탠다드 젤\n끈적임 없이 촉촉함을 유지해 주는 수용성 스탠다드 젤\n50%9,900원\n73\n4.78 (18)",
+          "price": 9900
+        },
+        {
+          "text": "텐가 오리지널 콘돔 [6개입]\n원형 틴케이스의 새로운 형태, 6개로 구성된 서로 다른 디자인\n9,900원\n6",
+          "price": 9900
+        },
+        {
+          "text": "10% 할인\n세이브 인티메이트 네츄럴 수딩 젤(10pcs)\n파우치 타입으로 여행용으로 휴대하기 쉬운 세이브 수딩 젤\n10%10,710원\n2",
+          "price": 10710
+        },
+        {
+          "text": "텐가 플레이 젤\n둘만의 시간을 더 부드럽고 촉촉하게, 텐가 플레이 젤\n12,000원\n37\n5.00 (2)",
+          "price": 12000
+        },
+        {
+          "text": "초순 울트라 애널 프로텍션 로션\n고농도의 점성력과 쫀쫀한 수분유지력으로 촉촉한 울트라 애너스 프로텍션 젤\n20%12,000원\n30\n4.83 (12)",
+          "price": 12000
+        },
+        {
+          "text": "핀돔 핑거콘돔 5종\n안전한 핑거링을 위한 핑거콘돔, 깔끔한 개별포장\n25%12,000원\n102\n5.00 (43)",
+          "price": 12000
+        },
+        {
+          "text": "킨제이 001 울트라씬 콘돔 12p\n20%12,000원\n3",
+          "price": 12000
+        }
+      ]
+    },
+    {
+      "id": "STORE-002",
+      "url": "https://lomastore.com/store/lifestyle?orderby=price&order=asc&page=1",
+      "direction": "asc",
+      "products": [
+        {
+          "text": "[2+1] 리리러피 밸런스 젤 디스커버리 세트\n30분 동안 유지되는 촉촉함. 리뉴얼 출시 한정 2+1 디스커버리 세트\n47%56,000원\n78\n4.95 (253)",
+          "price": 56000
+        },
+        {
+          "text": "로마 쇼핑백\n사랑을 담은 선물을 담기에 더 없이 좋은 로마 쇼핑백\n1,500원\n1\n5.00 (1)",
+          "price": 1500
+        },
+        {
+          "text": "응응주사위\n주사위를 돌려 나오는대로 96가지 랜덤미션 커플게임 주사위\n25%6,000원\n14",
+          "price": 6000
+        },
+        {
+          "text": "지혜 향균패드 [팬티라이너 롱]\n지구와 나를 위한 친환경 소재로, 항균력까지 더해 민감한 그날에도 안심하고 산뜻한, 지혜 향균 패드\n42%7,000원\n1\n5.00 (5)",
+          "price": 7000
+        },
+        {
+          "text": "응응 연애고사\n연애 중인 당신이 꼭 풀어야 할 연애고사\n20%8,900원\n6\n5.00 (1)",
+          "price": 8900
+        },
+        {
+          "text": "지혜 에코 플러시패드 소형 [14p]\n접착제가없는 천연펄프로 그날에도 가볍고 깨끗하게, 지혜 본드프리 에코 플러시패드\n30%9,800원\n9\n5.00 (4)",
+          "price": 9800
+        },
+        {
+          "text": "지혜 향균패드 [중형]\n지구와 나를 위한 친환경 소재로, 항균력까지 더해 민감한 그날에도 안심하고 산뜻한, 지혜 향균 패드\n35%9,800원\n2\n5.00 (4)",
+          "price": 9800
+        },
+        {
+          "text": "시에라샤통 니플커버 100P\n기존의 니플커버의 문제점을 보완하여 새롭게 만들어진 니플 전용 커버\n10,000원\n16\n4.00 (3)",
+          "price": 10000
+        },
+        {
+          "text": "사랑의 카드게임 54종\n서로를 알아가는 섹시하고 달콤한 시간 사랑의 질문/체위 카드\n34%10,000원\n11",
+          "price": 10000
+        },
+        {
+          "text": "10% 할인\n세이브 인티메이트 네츄럴 수딩 젤(10pcs)\n파우치 타입으로 여행용으로 휴대하기 쉬운 세이브 수딩 젤\n10%10,710원\n2",
+          "price": 10710
+        },
+        {
+          "text": "ㄹㅇㅊㅊ 현타제로\n관계전후에 찾아오는 허무함을 극복해줄 현타제로\n28%10,900원\n15",
+          "price": 10900
+        },
+        {
+          "text": "응응젠가 알콩달콩 라이트 버전\n커플이 함께 즐기는 응응젱가 알콩달콩 버전\n22%11,000원\n6",
+          "price": 11000
+        },
+        {
+          "text": "응응젠가 19금 버전\n19금 질문 가득한 응응젱가 19금 버전\n22%11,000원\n25\n5.00 (3)",
+          "price": 11000
+        },
+        {
+          "text": "로마 러비 부클 파우치\n귀여운 러비가 따스한 부클 원단과 만난 넉넉한 크기의 다용도 파우치\n52%12,000원\n13",
+          "price": 12000
+        },
+        {
+          "text": "질 좋은 책\n학교에서 알려주지않은 진짜 성교육\n13,000원\n5.00 (1)",
+          "price": 13000
+        },
+        {
+          "text": "아들아, 콘돔 쓰렴\n아빠가 아들에게 들려주고 싶은 성에 대한 솔직한 이야기\n13,000원\n1",
+          "price": 13000
+        },
+        {
+          "text": "궁금한 게 많은 사춘기 너에게\n사춘기 딸을 위한 유쾌하고 친절한 만화형 성교육 책\n13,000원\n5.00 (1)",
+          "price": 13000
+        },
+        {
+          "text": "텐가 멘즈 트레이닝 컵 피니쉬 트레이닝\n지루에 도움을 주는 일회용 트레이닝 컵, 피니쉬 트레이닝\n28%13,000원\n10\n5.00 (10)",
+          "price": 13000
+        },
+        {
+          "text": "텐가 멘즈 트레이닝 컵 킵 트레이닝\n조루에 도움을 주는 트레이닝 컵, 킵 트레이닝\n28%13,000원\n30\n5.00 (15)",
+          "price": 13000
+        },
+        {
+          "text": "소녀들을 위한 내 몸 안내서\n사춘기는 처음인 소녀들을 위한 몸 마음 가이드 &nbsp;\n14,000원\n2",
+          "price": 14000
+        },
+        {
+          "text": "언니, 나랑 결혼할래요?\n동성 결혼이 법제화되지 않은 한국에서 레즈비언이 결혼하고 잘 살아가는 방법\n14,000원\n1",
+          "price": 14000
+        },
+        {
+          "text": "김불꽃의 불꽃 튀는 성인식\n성 개념 제대로 탑재해주는 21세기형 성 상식 필독서\n14,800원\n1\n5.00 (1)",
+          "price": 14800
+        },
+        {
+          "text": "혼자서도 잘하는 반려가전 팝니다\n혐오와 착취는 취급 안하는 여성 전용 섹스토이숍 유포리아 이야기\n15,000원\n3",
+          "price": 15000
+        },
+        {
+          "text": "가슴 샤워젤 디스펜서\n두 종류의 샤워젤을 넣을 수 있는 디스펜서\n17%15,000원\n4",
+          "price": 15000
+        },
+        {
+          "text": "재입고 알림 신청\n섹스 잘하는 남자 만들기\n여성 100명 인터뷰 기반 일러스트레이션 가득한 섹스 가이드\n15,000원\n7\n5.00 (1)",
+          "price": 15000
+        },
+        {
+          "text": "섹스, 사랑이라는 여자 열정이라는 남자\n오해와 왜곡에서 이해와 배려의 성심리학\n16,000원\n2",
+          "price": 16000
+        },
+        {
+          "text": "재입고 알림 신청\n환상적인 섹스는 50부터다\n중년의 몸과 상황에 맞춘 친절한 성생활 가이드\n16,000원\n2\n5.00 (1)",
+          "price": 16000
+        },
+        {
+          "text": "내일의 섹스는 다시 좋아질 것이다\n여성의 욕망, 동의, 성적 자율성에 대한 새로운 분석\n16,000원\n2",
+          "price": 16000
+        },
+        {
+          "text": "로마 타월 겟웻 160x80cm\n마음껏 마음 놓고 로마 타월과 함께\n36%18,000원\n19\n5.00 (8)",
+          "price": 18000
+        },
+        {
+          "text": "재입고 알림 신청\n에이스: 무성애로 다시 읽는 관계와 욕망, 로맨스\n성적 욕망은 당연한걸까? 100여명의 무성애자들의 이야기\n18,000원\n2",
+          "price": 18000
+        },
+        {
+          "text": "블랙아웃 실리콘 안대\n부드럽고 가벼운 탄성이 있는 실리콘으로 피부에 부담없이 밀착되는 블랙아웃 실리콘 안대\n19,900원\n12\n5.00 (4)",
+          "price": 19900
+        },
+        {
+          "text": "슈가즘 티트리 여성청결제\n예민한 Y존 피부장벽을 세우는 티트리 여성청결제\n29%20,000원\n9",
+          "price": 20000
+        },
+        {
+          "text": "텐가 멘즈 루페\n당신의 정자 상태를 알아 보고 싶지 않으신가요? 스마트폰용 정자 관찰 키트로 정자를 간편하게 확인해보세요.\n9%21,900원\n8",
+          "price": 21900
+        },
+        {
+          "text": "재입고 알림 신청\n섹스, 그리고 카마수트라\n수많은 섹스 체위에 대한 사진 가득한 가이드\n22,000원\n6",
+          "price": 22000
+        },
+        {
+          "text": "NEW✨\n데일리 프로텍트 패드\n젖을 수 있는 모든 순간을 위한 방수 패드, 데일리 프로텍트 패드\n22,000원\n43\n4.00 (2)",
+          "price": 22000
+        },
+        {
+          "text": "업코 본디지 테이프\n10%24,000원\n16\n5.00 (2)",
+          "price": 24000
+        }
+      ]
+    }
+  ],
+  "tested_source_files": [
+    {
+      "path": "automation/browser-contracts/cart-mutations.spec.ts",
+      "sha256": "e3018554faa8d4a718f2cb922f9a15ba8773d8773c5eb395d8d3f559b17461ec"
+    },
+    {
+      "path": "automation/browser-contracts/navigation.spec.ts",
+      "sha256": "a715b8618eabb597814382453648540ee79ea87479c3deaa0c3aba22f948d18e"
+    },
+    {
+      "path": "automation/browser-contracts/overlays.spec.ts",
+      "sha256": "4b76ada0275ff566d3c4fbd1b2791851fd0098f30a3a0ea2b00a2fcc70106ef0"
+    },
+    {
+      "path": "automation/ci/sync-failure-issues.js",
+      "sha256": "6da491fe38d252475d7718025a6824cf374596ecbab95c0497232388829453e0"
+    },
+    {
+      "path": "automation/pages/cart-mutations.ts",
+      "sha256": "99b43e345406796510147bb16492775f943afd572182255e83edbac087978e9d"
+    },
+    {
+      "path": "automation/pages/commerce.ts",
+      "sha256": "53be2ebc52efacb2ee57e613990cf18b6d3968bbd9dad6fe0b02b6e0224c6ac4"
+    },
+    {
+      "path": "automation/pages/overlays.ts",
+      "sha256": "02e136dd73cc9d41f6a00a6d67a0c64817a881975081ce663b030ca22bfb8a94"
+    },
+    {
+      "path": "automation/pages/rendered-text.ts",
+      "sha256": "d812607d67c6fd420937fe2adcbb34f6a248479e5f68ef148c9b7410709cd061"
+    },
+    {
+      "path": "automation/runner/healing/baseline.ts",
+      "sha256": "186982922404014ee8ba95ab77f7ea96b90dce17eba5bc0b0f312514d02c33fe"
+    },
+    {
+      "path": "automation/runner/healing/capture.ts",
+      "sha256": "07863150812a287ad5e700d80de954883301ff2b97a6570587df805e9e764441"
+    },
+    {
+      "path": "automation/runner/healing/recorder.ts",
+      "sha256": "9f91de6f97135559299ffcf626fc283fc6fc7ed68c89e26ece492d6531c2837f"
+    },
+    {
+      "path": "automation/runner/healing/resolver.ts",
+      "sha256": "b1249ad2b23d2f0cf42e9430296471dc1295238fe61ba64e660e10b7e7048b81"
+    },
+    {
+      "path": "automation/runner/healing/types.ts",
+      "sha256": "2df87b318d67e2adf2bba4e8e8b56f10ec40a5f0866c50fdbbe92679c9f0e7a4"
+    },
+    {
+      "path": "automation/runner/interpreter.ts",
+      "sha256": "10dd3671b37f2d0488d58b954c16f42d194ec6d9561c77b1cf8691462abd83a1"
+    },
+    {
+      "path": "automation/runner/known-issues.ts",
+      "sha256": "dd345da2c8099e25c8e7c577aec3b57c122c631273e4d9e545845b8f297f247d"
+    },
+    {
+      "path": "automation/runner/loader.ts",
+      "sha256": "55f04d72241fb5f2da2640da32a401b3bc3fa63d3f6e4ffcb1bbbf6bbaf001ac"
+    },
+    {
+      "path": "automation/runner/selection.ts",
+      "sha256": "a918f0dd52f73605ab24c20daccfb9dcedf4c013317ddf289832ea7f222faadb"
+    },
+    {
+      "path": "automation/runner/selectors.ts",
+      "sha256": "aacea2f0e5882059e742f449f34c76c801fc2daa3d27cce3f8b688a37929770b"
+    },
+    {
+      "path": "automation/runner/types.ts",
+      "sha256": "b54bab73c7d926745915ffdf3e16932cf8eb62c5bf47bfc34496bcaf44623b6a"
+    },
+    {
+      "path": "automation/steps/custom.ts",
+      "sha256": "a5ddb044c67c13eda2c24f265cce71fa78ca11a88a83037994bbf8e56b112e42"
+    },
+    {
+      "path": "automation/tests/run-testcases.spec.ts",
+      "sha256": "eb71b099fa0747cdbcf047192f2e853b58d345018f2345fe94fcafb38e8065dd"
+    },
+    {
+      "path": "automation/unit/contracts.test.cjs",
+      "sha256": "a3a8a23929544fa954e9c32acd77011abe06c65b26d12947fda0c3fa57730437"
+    },
+    {
+      "path": "automation/unit/merge-contracts.test.cjs",
+      "sha256": "adf2cb4b81c4baa9a74e303c2f165ba0d27b1ef9109bd30ae027654784803ad7"
+    },
+    {
+      "path": "automation/unit/report.test.mjs",
+      "sha256": "9d8e7689dfcca056a65e6c24b5c643f25bc22026de689b1d288619194f774cf0"
+    },
+    {
+      "path": "selectors/cart.yaml",
+      "sha256": "aba7810b321b24bf5e95769e32dc4af81fedb32d2ae9159ae3563459f9c67c01"
+    },
+    {
+      "path": "selectors/checkout.yaml",
+      "sha256": "db3281254bccc67de3c9ecc701b920804fe58cca008681a6f88f46020b1d26ff"
+    },
+    {
+      "path": "selectors/home.yaml",
+      "sha256": "d765e0589158f4ec4093ae23d5534092924278026f5ed4f79dea1dfcdbef6745"
+    },
+    {
+      "path": "selectors/legal.yaml",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "selectors/order-tracking.yaml",
+      "sha256": "05ce6f4adf4654490916abd403ffdcabe61561e2914a54ea2960e3d836ebefef"
+    },
+    {
+      "path": "selectors/product.yaml",
+      "sha256": "68ef80ec1d5499163360782179c8faf908779be39dc10b059bc93bf56fce5859"
+    },
+    {
+      "path": "selectors/product_pages.yaml",
+      "sha256": "8123ba2d525bf8ec2f3081727b6c9cc59a9e4066270bd85701371ecf5cbd96e6"
+    },
+    {
+      "path": "selectors/search.yaml",
+      "sha256": "43884a26c9f84b90a587cdb26c49c90d659b5643f1fbea46cdbcbc5702c58283"
+    },
+    {
+      "path": "selectors/signin.yaml",
+      "sha256": "e54d7387c696488f35a002a642de3d9c89b94b35c97357d49db39b78531f0bd2"
+    },
+    {
+      "path": "selectors/store.yaml",
+      "sha256": "58918b9dd6efedc1b5f39fd0e195c0f15fb7e859b1ab39560a53b869e3182ea3"
+    },
+    {
+      "path": "fixtures/lomastore.yaml",
+      "sha256": "5b8f9579d558ca21e0ac2b40d0aff07d8f3941ed3d783ba512fba51fe73819ad"
+    }
+  ],
+  "smoke_passed": 11
+}

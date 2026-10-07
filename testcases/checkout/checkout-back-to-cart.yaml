@@ -1,0 +1,28 @@
+id: CHECKOUT-008
+title: 주문서에서 뒤로 가면 장바구니 수량과 금액이 유지된다
+tags:
+  - regression
+  - checkout
+priority: P2
+status: active
+enabled: true
+precondition: 새 브라우저 컨텍스트의 비회원 세션; 대표 상품 재고 있음; 테스트가 장바구니를 독립 준비
+steps:
+  - action: custom
+    name: prepare_cart
+  - action: custom
+    value: increase
+    name: change_cart_quantity
+  - action: custom
+    value: "2"
+    name: assert_cart
+  - action: click
+    target: order_button
+  - action: custom
+    value: "2"
+    name: assert_checkout
+  - action: custom
+    name: return_to_cart
+  - action: custom
+    value: "2"
+    name: assert_cart

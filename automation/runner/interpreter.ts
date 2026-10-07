@@ -36,7 +36,8 @@ export async function runTestCase(page: Page, testCase: TestCase, selectors: Sel
         case 'navigate': {
           const url = step.target ? selectors.pages[step.target] : undefined;
           if (!url) throw new Error(`정의되지 않은 page: ${step.target}`);
-          await page.goto(resolveTemplate(url, context));
+          // 외부 이미지와 추적 스크립트의 load 완료에 의존하지 않고 다음 assertion이 화면 준비를 확인해.
+          await page.goto(resolveTemplate(url, context), {waitUntil:'domcontentloaded'});
           break;
         }
         case 'click':

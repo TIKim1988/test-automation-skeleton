@@ -1,12 +1,16 @@
 search:
   keyword_with_results: 페로몬
   keyword_no_match: qaemptyzqxvnonexistent
+  keyword_single_result: 네이키드 휘그
 product:
   guest_accessible_slug: lililufy-pheromone-perfume-naked-fig-50
   guest_accessible_name: 리리러피 페로몬 인핸스드 퍼퓸 네이키드 휘그 50ml
   login_required_slug: loma-gloss-2-lililufy-150
 store:
   category_path: lifestyle
+secondary_product:
+  guest_accessible_slug: lililufy-pheromone-perfume-dirty-cashmere-50
+  guest_accessible_name: 리리러피 페로몬 인핸스드 퍼퓸 더티 캐시미어 50ml
 checkout:
   guest_orderer:
     name: 테스트주문자

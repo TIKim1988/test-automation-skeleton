@@ -1,0 +1,22 @@
+id: SEARCH-007
+title: 검색 상품을 클릭하면 해당 상품 상세의 식별값과 구매 버튼이 표시된다
+tags:
+  - regression
+  - search
+priority: P2
+status: active
+enabled: true
+precondition: 새 브라우저 컨텍스트의 비회원 세션; 대표 상품 검색 결과 있음
+last_verified: "2026-10-07"
+steps:
+  - action: navigate
+    target: home_page
+  - action: custom
+    value: ${search.keyword_with_results}
+    name: search_for
+  - action: custom
+    name: assert_search_results
+  - action: custom
+    name: open_search_product
+  - action: assert_visible
+    target: add_to_cart_button
