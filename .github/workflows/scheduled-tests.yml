@@ -4,19 +4,19 @@ on:
   push:
     branches: [main, codex/automation-operability]
   schedule:
-    # 매일 한국 시간 09:00 (UTC 00:00)에 핵심 smoke 테스트만 실행합니다.
+    # 매일 한국 시간 09:00 (UTC 00:00)에 전체 테스트를 실행합니다.
     - cron: '0 0 * * *'
   workflow_dispatch:
     inputs:
       suite:
-        description: '실행할 테스트 범위'
+        description: '실행할 테스트 범위 (기본: 전체)'
         required: true
-        default: smoke
+        default: all
         type: choice
         options:
+          - all
           - smoke
           - regression
-          - all
 
 permissions:
   contents: read
@@ -49,7 +49,7 @@ jobs:
 
       - name: Select test suite
         run: |
-          suite="${{ github.event_name != 'workflow_dispatch' && 'smoke' || inputs.suite }}"
+          suite="${{ inputs.suite || 'all' }}"
           if [ "$suite" = "all" ]; then
             echo "TEST_TAGS=" >> "$GITHUB_ENV"
           else

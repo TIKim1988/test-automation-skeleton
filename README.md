@@ -1,3 +1,5 @@
+> 2026-10-08: 예약 실행과 푸시 후 실행은 전체 43개 TC를 대상으로 해. 수동 실행 기본값도 `all`이야. smoke와 regression 태그는 필요할 때 일부 케이스를 선택하는 용도로 유지해.
+
 > 2026-10-07: 회귀 14개를 추가해 총 43개 TC, smoke 11개와 regression 32개로 확장했어. 최종 로컬 전체 실행은 40 통과, 3 실패이고 신규 케이스는 13/14 통과야. 실패는 가격 정렬 2개와 주문서 뒤로 가기 후 수량 불일치 1개로 유지해. [확장 명세와 구현 기록](docs/lomastore-expansion-2026-10-07.md), [실행 근거](docs/lomastore-expansion-validation-2026-10-07.json)를 참고해.
 >
 > 장바구니 수량 변경과 삭제는 성공 응답 완료 후 다음 단계로 이동해. `npm run test:contracts`는 저장 지연, 서버 오류, 페이지 이동과 팝업 처리 8개를 검증해. 아래 날짜별 실행 수치는 과거 기록이야.
@@ -117,13 +119,13 @@ P1 skip, 전체 skip, 빈 실행, 재시도 통과, 실행 오류는 정상 성�
 npm install
 npx playwright install --with-deps chromium   # 최초 1회
 npm run check                                 # 타입, CSV, 단위 테스트
-npx playwright test                            # lomastore.com 대상, 29개
+npx playwright test                            # lomastore.com 대상, 전체 43개
 npm run report:summary                        # 실패 또는 flaky가 있으면 비정상 종료
-npm run test:smoke                             # 매일 실행하는 핵심 11개
-npm run test:regression                        # 회귀 테스트만 수동 실행
+npm run test:smoke                             # 필요할 때 핵심 11개만 선택
+npm run test:regression                        # 필요할 때 회귀 32개만 선택
 ```
 
-GitHub Actions는 매일 한국 시간 09:00에 smoke만 실행합니다. regression/all은 Actions의 **Run workflow**에서 선택해 실행합니다.
+GitHub Actions는 매일 한국 시간 09:00 예약과 `main`, `codex/automation-operability` 푸시에서 전체 테스트를 실행해. 현재 대상은 43개이고, 새 케이스도 활성 상태로 추가하면 자동으로 포함돼. Actions의 **Run workflow** 기본값도 `all`이며, 일부 케이스만 확인할 때 `smoke` 또는 `regression`을 직접 선택할 수 있어. 이메일과 실행 요약에 실제 선택 범위를 표시해.
 
 로그인 자체는 현재 스코프에서 제외되어 있습니다 (`selectors/signin.yaml` 참고 — 비로그인
 상태에서 인증이 필요한 동작을 했을 때 로그인 화면으로 정상 리다이렉트되는지만 확인). 실제
